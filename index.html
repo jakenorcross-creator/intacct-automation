@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industry Audience Research Tool</title>
+    <title>Industry Research Tool</title>
     <style>
         * {
             margin: 0;
@@ -13,120 +13,155 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #ecfdf5 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 48px);
+        }
+
+        .content {
+            width: 100%;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header {
             text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 40px rgba(0, 220, 6, 0.3);
+            animation: scaleIn 0.4s ease-out 0.2s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .icon-circle svg {
+            width: 40px;
+            height: 40px;
             color: white;
-            margin-bottom: 40px;
         }
 
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeIn 0.6s ease-out 0.3s both;
         }
 
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #6b7280;
+            font-weight: 300;
+            animation: fadeIn 0.6s ease-out 0.4s both;
         }
 
         .card {
             background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #e0e0e0;
-            flex-wrap: wrap;
-        }
-
-        .tab {
-            padding: 12px 24px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-size: 16px;
-            color: #666;
-            transition: all 0.3s;
-            border-bottom: 3px solid transparent;
-            margin-bottom: -2px;
-        }
-
-        .tab:hover {
-            color: #667eea;
-        }
-
-        .tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-            font-weight: 600;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0, 220, 6, 0.1);
+            border: 1px solid #f3f4f6;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 32px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        input, select {
+        input[type="text"],
+        input[type="email"] {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            height: 64px;
+            padding: 0 20px;
+            font-size: 1.125rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            transition: all 0.3s;
+            background: white;
         }
 
-        input:focus, select:focus {
+        input[type="text"]:focus,
+        input[type="email"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #00dc06;
+            box-shadow: 0 0 0 4px rgba(0, 220, 6, 0.2);
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 100%;
+            height: 64px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
             color: white;
             border: none;
-            padding: 14px 32px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 16px;
             cursor: pointer;
-            width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 220, 6, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 40px rgba(0, 220, 6, 0.4);
         }
 
         .btn:active {
@@ -134,218 +169,212 @@
         }
 
         .btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
 
-        .loading {
-            display: none;
+        .card-footer {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid #f3f4f6;
             text-align: center;
-            margin-top: 20px;
         }
 
-        .loading.active {
-            display: block;
+        .step-indicator {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            font-weight: 300;
         }
 
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
+        /* Research Options Styles */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .research-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
         }
 
-        .message {
+        .research-card:hover {
+            border-color: #00dc06;
+            box-shadow: 0 10px 30px rgba(0, 220, 6, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .research-card.selected {
+            border-color: #00dc06;
+            background: linear-gradient(135deg, rgba(0, 77, 0, 0.05) 0%, rgba(0, 220, 6, 0.05) 100%);
+        }
+
+        .research-card h3 {
+            font-size: 1.125rem;
+            margin: 16px 0 8px;
+            color: #111827;
+        }
+
+        .research-card p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .research-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            background: #f3f4f6;
+            color: #374151;
+            margin-bottom: 16px;
+            box-shadow: none;
+        }
+
+        .back-btn:hover {
+            background: #e5e7eb;
+            box-shadow: none;
+        }
+
+        .hidden {
             display: none;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-weight: 500;
-        }
-
-        .message.active {
-            display: block;
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .info-box {
-            background: #e7f3ff;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-
-        .info-box p {
-            color: #666;
-            line-height: 1.6;
         }
 
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 1.8em;
+            h1 {
+                font-size: 2rem;
             }
 
-            .tabs {
-                overflow-x: auto;
-                flex-wrap: nowrap;
+            .card {
+                padding: 32px 24px;
             }
 
-            .tab {
-                white-space: nowrap;
+            .research-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🎯 Industry Audience Research</h1>
-            <p>Get comprehensive marketing intelligence for any industry</p>
-        </div>
+        <div class="content">
+            <!-- Step 1: Industry Input -->
+            <div id="step1">
+                <div class="header">
+                    <div class="icon-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14m-7-7h14"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h1>Industry Research</h1>
+                    <p class="subtitle">Tell us which industry you'd like to explore</p>
+                </div>
 
-        <div class="card">
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab('publications')">📚 Publications</button>
-                <button class="tab" onclick="switchTab('conferences')">📅 Conferences</button>
-                <button class="tab" onclick="switchTab('associations')">🏛️ Associations</button>
-                <button class="tab" onclick="switchTab('linkedin')">💼 LinkedIn</button>
-                <button class="tab" onclick="switchTab('meta')">📱 Meta</button>
+                <div class="card">
+                    <form onsubmit="handleIndustrySubmit(event)">
+                        <div class="form-group">
+                            <label for="industry">Industry Name</label>
+                            <input 
+                                type="text" 
+                                id="industry" 
+                                placeholder="e.g., Healthcare, Technology, Finance..."
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="btn">
+                            Continue
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14m-7-7l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </form>
+
+                    <div class="card-footer">
+                        <p class="step-indicator">Step 1 of 2</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Publications Tab -->
-            <div id="publications" class="tab-content active">
-                <div class="info-box">
-                    <p><strong>Publications Research</strong> finds trade magazines, journals, and media outlets in your industry with advertising rates, readership data, and media kit information.</p>
+            <!-- Step 2: Research Options -->
+            <div id="step2" class="hidden">
+                <div class="header">
+                    <h1>Select Research Types</h1>
+                    <p class="subtitle">Choose what you'd like to research for <strong id="selectedIndustry"></strong></p>
                 </div>
-                <form onsubmit="submitForm(event, 'publications')">
-                    <div class="form-group">
-                        <label>Industry *</label>
-                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Your Email *</label>
-                        <input type="email" name="email" placeholder="you@company.com" required>
-                    </div>
-                    <button type="submit" class="btn">Get Publications Research</button>
-                </form>
-                <div class="loading" id="loading-publications">
-                    <div class="spinner"></div>
-                    <p>Researching publications... This may take 2-3 minutes.</p>
-                </div>
-                <div class="message" id="message-publications"></div>
-            </div>
 
-            <!-- Conferences Tab -->
-            <div id="conferences" class="tab-content">
-                <div class="info-box">
-                    <p><strong>Conferences Research</strong> identifies industry events with dates, venues, attendance numbers, booth pricing, and sponsorship opportunities.</p>
-                </div>
-                <form onsubmit="submitForm(event, 'conferences')">
-                    <div class="form-group">
-                        <label>Industry *</label>
-                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Your Email *</label>
-                        <input type="email" name="email" placeholder="you@company.com" required>
-                    </div>
-                    <button type="submit" class="btn">Get Conferences Research</button>
-                </form>
-                <div class="loading" id="loading-conferences">
-                    <div class="spinner"></div>
-                    <p>Researching conferences... This may take 2-3 minutes.</p>
-                </div>
-                <div class="message" id="message-conferences"></div>
-            </div>
+                <div class="card">
+                    <button onclick="goBack()" class="btn back-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5m7 7l-7-7 7-7"/>
+                        </svg>
+                        Back
+                    </button>
 
-            <!-- Associations Tab -->
-            <div id="associations" class="tab-content">
-                <div class="info-box">
-                    <p><strong>Associations Research</strong> finds trade associations and professional organizations with membership data, pricing, annual events, and sponsorship opportunities.</p>
-                </div>
-                <form onsubmit="submitForm(event, 'associations')">
-                    <div class="form-group">
-                        <label>Industry *</label>
-                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Your Email *</label>
-                        <input type="email" name="email" placeholder="you@company.com" required>
-                    </div>
-                    <button type="submit" class="btn">Get Associations Research</button>
-                </form>
-                <div class="loading" id="loading-associations">
-                    <div class="spinner"></div>
-                    <p>Researching associations... This may take 2-3 minutes.</p>
-                </div>
-                <div class="message" id="message-associations"></div>
-            </div>
+                    <div class="research-grid">
+                        <div class="research-card" onclick="toggleSelection('publications')">
+                            <div class="research-icon">📚</div>
+                            <h3>Publications</h3>
+                            <p>Trade magazines, journals, and media outlets</p>
+                        </div>
 
-            <!-- LinkedIn Tab -->
-            <div id="linkedin" class="tab-content">
-                <div class="info-box">
-                    <p><strong>LinkedIn Targeting</strong> generates a complete LinkedIn advertising strategy with job titles, functions, skills, company sizes, and budget recommendations.</p>
-                </div>
-                <form onsubmit="submitForm(event, 'linkedin')">
-                    <div class="form-group">
-                        <label>Industry *</label>
-                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Your Email *</label>
-                        <input type="email" name="email" placeholder="you@company.com" required>
-                    </div>
-                    <button type="submit" class="btn">Get LinkedIn Strategy</button>
-                </form>
-                <div class="loading" id="loading-linkedin">
-                    <div class="spinner"></div>
-                    <p>Generating LinkedIn strategy... This will take about 30 seconds.</p>
-                </div>
-                <div class="message" id="message-linkedin"></div>
-            </div>
+                        <div class="research-card" onclick="toggleSelection('conferences')">
+                            <div class="research-icon">📅</div>
+                            <h3>Conferences</h3>
+                            <p>Industry events with dates and pricing</p>
+                        </div>
 
-            <!-- Meta Tab -->
-            <div id="meta" class="tab-content">
-                <div class="info-box">
-                    <p><strong>Meta Targeting</strong> creates a Facebook & Instagram advertising strategy with interests, behaviors, demographics, placements, and creative recommendations.</p>
-                </div>
-                <form onsubmit="submitForm(event, 'meta')">
-                    <div class="form-group">
-                        <label>Industry *</label>
-                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
+                        <div class="research-card" onclick="toggleSelection('associations')">
+                            <div class="research-icon">🏛️</div>
+                            <h3>Associations</h3>
+                            <p>Trade associations and organizations</p>
+                        </div>
+
+                        <div class="research-card" onclick="toggleSelection('linkedin')">
+                            <div class="research-icon">💼</div>
+                            <h3>LinkedIn</h3>
+                            <h3>Targeting</h3>
+                            <p>LinkedIn advertising strategy</p>
+                        </div>
+
+                        <div class="research-card" onclick="toggleSelection('meta')">
+                            <div class="research-icon">📱</div>
+                            <h3>Meta Targeting</h3>
+                            <p>Facebook & Instagram ads strategy</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Your Email *</label>
-                        <input type="email" name="email" placeholder="you@company.com" required>
+
+                    <div class="form-group" style="margin-top: 32px;">
+                        <label for="email">Your Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            placeholder="you@company.com"
+                            required
+                        >
                     </div>
-                    <button type="submit" class="btn">Get Meta Strategy</button>
-                </form>
-                <div class="loading" id="loading-meta">
-                    <div class="spinner"></div>
-                    <p>Generating Meta strategy... This will take about 30 seconds.</p>
+
+                    <button onclick="submitResearch()" class="btn" id="submitBtn" disabled>
+                        Start Research
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14m-7-7l7 7-7 7"/>
+                        </svg>
+                    </button>
+
+                    <div class="card-footer">
+                        <p class="step-indicator">Step 2 of 2 • <span id="selectionCount">0</span> selected</p>
+                    </div>
                 </div>
-                <div class="message" id="message-meta"></div>
             </div>
         </div>
     </div>
@@ -359,61 +388,90 @@
             meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta'
         };
 
-        function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
+        let selectedIndustry = '';
+        let selectedResearch = new Set();
 
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+        function handleIndustrySubmit(event) {
+            event.preventDefault();
+            selectedIndustry = document.getElementById('industry').value.trim();
+            
+            if (selectedIndustry) {
+                document.getElementById('selectedIndustry').textContent = selectedIndustry;
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+            }
         }
 
-        async function submitForm(event, type) {
-            event.preventDefault();
+        function goBack() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+            selectedResearch.clear();
+            updateSelectionCount();
+        }
+
+        function toggleSelection(type) {
+            const card = event.currentTarget;
             
-            const form = event.target;
-            const formData = new FormData(form);
+            if (selectedResearch.has(type)) {
+                selectedResearch.delete(type);
+                card.classList.remove('selected');
+            } else {
+                selectedResearch.add(type);
+                card.classList.add('selected');
+            }
+            
+            updateSelectionCount();
+        }
+
+        function updateSelectionCount() {
+            const count = selectedResearch.size;
+            document.getElementById('selectionCount').textContent = count;
+            document.getElementById('submitBtn').disabled = count === 0;
+        }
+
+        async function submitResearch() {
+            const email = document.getElementById('email').value.trim();
+            
+            if (!email || selectedResearch.size === 0) {
+                alert('Please select at least one research type and provide your email.');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Submitting...';
+
             const data = {
-                industry: formData.get('industry'),
-                email: formData.get('email')
+                industry: selectedIndustry,
+                email: email
             };
 
-            // Show loading, hide message
-            const loading = document.getElementById(`loading-${type}`);
-            const message = document.getElementById(`message-${type}`);
-            const submitBtn = form.querySelector('button[type="submit"]');
-            
-            loading.classList.add('active');
-            message.classList.remove('active', 'success', 'error');
-            submitBtn.disabled = true;
+            const promises = Array.from(selectedResearch).map(type => 
+                fetch(WEBHOOK_URLS[type], {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+            );
 
             try {
-                const response = await fetch(WEBHOOK_URLS[type], {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
+                await Promise.all(promises);
+                alert(`✓ Success! Your research for ${selectedResearch.size} type(s) has been sent to ${email}. Check your inbox in 2-3 minutes.`);
+                
+                // Reset
+                selectedIndustry = '';
+                selectedResearch.clear();
+                document.getElementById('industry').value = '';
+                document.getElementById('email').value = '';
+                document.querySelectorAll('.research-card').forEach(card => {
+                    card.classList.remove('selected');
                 });
-
-                if (response.ok) {
-                    message.textContent = `✓ Success! Your ${type} research has been sent to ${data.email}. Check your inbox in 2-3 minutes.`;
-                    message.classList.add('active', 'success');
-                    form.reset();
-                } else {
-                    throw new Error('Request failed');
-                }
+                goBack();
             } catch (error) {
-                message.textContent = `✗ Something went wrong. Please try again or contact support.`;
-                message.classList.add('active', 'error');
+                alert('✗ Something went wrong. Please try again.');
             } finally {
-                loading.classList.remove('active');
                 submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Start Research <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
             }
         }
     </script>
