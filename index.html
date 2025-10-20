@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Audience Research Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .message {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        .message.active {
+            display: block;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+
+            .tab {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Industry Audience Research</h1>
+            <p>Get comprehensive marketing intelligence for any industry</p>
+        </div>
+
+        <div class="card">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('publications')">📚 Publications</button>
+                <button class="tab" onclick="switchTab('conferences')">📅 Conferences</button>
+                <button class="tab" onclick="switchTab('associations')">🏛️ Associations</button>
+                <button class="tab" onclick="switchTab('linkedin')">💼 LinkedIn</button>
+                <button class="tab" onclick="switchTab('meta')">📱 Meta</button>
+            </div>
+
+            <!-- Publications Tab -->
+            <div id="publications" class="tab-content active">
+                <div class="info-box">
+                    <p><strong>Publications Research</strong> finds trade magazines, journals, and media outlets in your industry with advertising rates, readership data, and media kit information.</p>
+                </div>
+                <form onsubmit="submitForm(event, 'publications')">
+                    <div class="form-group">
+                        <label>Industry *</label>
+                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Email *</label>
+                        <input type="email" name="email" placeholder="you@company.com" required>
+                    </div>
+                    <button type="submit" class="btn">Get Publications Research</button>
+                </form>
+                <div class="loading" id="loading-publications">
+                    <div class="spinner"></div>
+                    <p>Researching publications... This may take 2-3 minutes.</p>
+                </div>
+                <div class="message" id="message-publications"></div>
+            </div>
+
+            <!-- Conferences Tab -->
+            <div id="conferences" class="tab-content">
+                <div class="info-box">
+                    <p><strong>Conferences Research</strong> identifies industry events with dates, venues, attendance numbers, booth pricing, and sponsorship opportunities.</p>
+                </div>
+                <form onsubmit="submitForm(event, 'conferences')">
+                    <div class="form-group">
+                        <label>Industry *</label>
+                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Email *</label>
+                        <input type="email" name="email" placeholder="you@company.com" required>
+                    </div>
+                    <button type="submit" class="btn">Get Conferences Research</button>
+                </form>
+                <div class="loading" id="loading-conferences">
+                    <div class="spinner"></div>
+                    <p>Researching conferences... This may take 2-3 minutes.</p>
+                </div>
+                <div class="message" id="message-conferences"></div>
+            </div>
+
+            <!-- Associations Tab -->
+            <div id="associations" class="tab-content">
+                <div class="info-box">
+                    <p><strong>Associations Research</strong> finds trade associations and professional organizations with membership data, pricing, annual events, and sponsorship opportunities.</p>
+                </div>
+                <form onsubmit="submitForm(event, 'associations')">
+                    <div class="form-group">
+                        <label>Industry *</label>
+                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Email *</label>
+                        <input type="email" name="email" placeholder="you@company.com" required>
+                    </div>
+                    <button type="submit" class="btn">Get Associations Research</button>
+                </form>
+                <div class="loading" id="loading-associations">
+                    <div class="spinner"></div>
+                    <p>Researching associations... This may take 2-3 minutes.</p>
+                </div>
+                <div class="message" id="message-associations"></div>
+            </div>
+
+            <!-- LinkedIn Tab -->
+            <div id="linkedin" class="tab-content">
+                <div class="info-box">
+                    <p><strong>LinkedIn Targeting</strong> generates a complete LinkedIn advertising strategy with job titles, functions, skills, company sizes, and budget recommendations.</p>
+                </div>
+                <form onsubmit="submitForm(event, 'linkedin')">
+                    <div class="form-group">
+                        <label>Industry *</label>
+                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Email *</label>
+                        <input type="email" name="email" placeholder="you@company.com" required>
+                    </div>
+                    <button type="submit" class="btn">Get LinkedIn Strategy</button>
+                </form>
+                <div class="loading" id="loading-linkedin">
+                    <div class="spinner"></div>
+                    <p>Generating LinkedIn strategy... This will take about 30 seconds.</p>
+                </div>
+                <div class="message" id="message-linkedin"></div>
+            </div>
+
+            <!-- Meta Tab -->
+            <div id="meta" class="tab-content">
+                <div class="info-box">
+                    <p><strong>Meta Targeting</strong> creates a Facebook & Instagram advertising strategy with interests, behaviors, demographics, placements, and creative recommendations.</p>
+                </div>
+                <form onsubmit="submitForm(event, 'meta')">
+                    <div class="form-group">
+                        <label>Industry *</label>
+                        <input type="text" name="industry" placeholder="e.g., healthcare, trucking & logistics" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Email *</label>
+                        <input type="email" name="email" placeholder="you@company.com" required>
+                    </div>
+                    <button type="submit" class="btn">Get Meta Strategy</button>
+                </form>
+                <div class="loading" id="loading-meta">
+                    <div class="spinner"></div>
+                    <p>Generating Meta strategy... This will take about 30 seconds.</p>
+                </div>
+                <div class="message" id="message-meta"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WEBHOOK_URLS = {
+            publications: 'https://jakenorcross.app.n8n.cloud/webhook/publications',
+            conferences: 'https://jakenorcross.app.n8n.cloud/webhook/conferences',
+            associations: 'https://jakenorcross.app.n8n.cloud/webhook/associations',
+            linkedin: 'https://jakenorcross.app.n8n.cloud/webhook/linkedin',
+            meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta'
+        };
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function submitForm(event, type) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {
+                industry: formData.get('industry'),
+                email: formData.get('email')
+            };
+
+            // Show loading, hide message
+            const loading = document.getElementById(`loading-${type}`);
+            const message = document.getElementById(`message-${type}`);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            loading.classList.add('active');
+            message.classList.remove('active', 'success', 'error');
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(WEBHOOK_URLS[type], {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    message.textContent = `✓ Success! Your ${type} research has been sent to ${data.email}. Check your inbox in 2-3 minutes.`;
+                    message.classList.add('active', 'success');
+                    form.reset();
+                } else {
+                    throw new Error('Request failed');
+                }
+            } catch (error) {
+                message.textContent = `✗ Something went wrong. Please try again or contact support.`;
+                message.classList.add('active', 'error');
+            } finally {
+                loading.classList.remove('active');
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
