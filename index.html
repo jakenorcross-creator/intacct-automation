@@ -123,7 +123,8 @@
         }
 
         input[type="text"],
-        input[type="email"] {
+        input[type="email"],
+        select {
             width: 100%;
             height: 64px;
             padding: 0 20px;
@@ -135,10 +136,15 @@
         }
 
         input[type="text"]:focus,
-        input[type="email"]:focus {
+        input[type="email"]:focus,
+        select:focus {
             outline: none;
             border-color: #00dc06;
             box-shadow: 0 0 0 4px rgba(0, 220, 6, 0.2);
+        }
+
+        select {
+            cursor: pointer;
         }
 
         .btn {
@@ -292,6 +298,24 @@
                             >
                         </div>
 
+                        <div class="form-group">
+                            <label for="region">Region</label>
+                            <select id="region" required>
+                                <option value="">Select a region...</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product">Product</label>
+                            <select id="product" required>
+                                <option value="">Select a product...</option>
+                                <option value="Sage 50">Sage 50</option>
+                                <option value="Sage Intacct">Sage Intacct</option>
+                            </select>
+                        </div>
+
                         <button type="submit" class="btn">
                             Continue
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -389,13 +413,17 @@
         };
 
         let selectedIndustry = '';
+        let selectedRegion = '';
+        let selectedProduct = '';
         let selectedResearch = new Set();
 
         function handleIndustrySubmit(event) {
             event.preventDefault();
             selectedIndustry = document.getElementById('industry').value.trim();
+            selectedRegion = document.getElementById('region').value;
+            selectedProduct = document.getElementById('product').value;
             
-            if (selectedIndustry) {
+            if (selectedIndustry && selectedRegion && selectedProduct) {
                 document.getElementById('selectedIndustry').textContent = selectedIndustry;
                 document.getElementById('step1').classList.add('hidden');
                 document.getElementById('step2').classList.remove('hidden');
@@ -443,6 +471,8 @@
 
             const data = {
                 industry: selectedIndustry,
+                region: selectedRegion,
+                product: selectedProduct,
                 email: email
             };
 
@@ -460,8 +490,12 @@
                 
                 // Reset
                 selectedIndustry = '';
+                selectedRegion = '';
+                selectedProduct = '';
                 selectedResearch.clear();
                 document.getElementById('industry').value = '';
+                document.getElementById('region').value = '';
+                document.getElementById('product').value = '';
                 document.getElementById('email').value = '';
                 document.querySelectorAll('.research-card').forEach(card => {
                     card.classList.remove('selected');
