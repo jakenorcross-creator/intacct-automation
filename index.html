@@ -49,9 +49,9 @@
         }
 
         .icon-circle {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
+            width: 120px;
+            height: 120px;
+            background: white;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
@@ -59,6 +59,7 @@
             margin-bottom: 24px;
             box-shadow: 0 10px 40px rgba(0, 220, 6, 0.3);
             animation: scaleIn 0.4s ease-out 0.2s both;
+            padding: 20px;
         }
 
         @keyframes scaleIn {
@@ -70,10 +71,10 @@
             }
         }
 
-        .icon-circle svg {
-            width: 40px;
-            height: 40px;
-            color: white;
+        .icon-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         h1 {
@@ -277,10 +278,7 @@
             <div id="step1">
                 <div class="header">
                     <div class="icon-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 5v14m-7-7h14"/>
-                            <circle cx="12" cy="12" r="3"/>
-                        </svg>
+                        <img src="https://www.sage.com/en-us/-/media/images/sagedotcom/master/press-zone/sage-logo-green.svg" alt="Sage Logo">
                     </div>
                     <h1>Industry Research</h1>
                     <p class="subtitle">Tell us which industry you'd like to explore</p>
