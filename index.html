@@ -232,55 +232,42 @@
         .research-card p {
             font-size: 0.875rem;
             color: #6b7280;
-            line-height: 1.5;
         }
 
         .research-icon {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 8px;
-        }
-
-        .back-btn {
-            background: #f3f4f6;
-            color: #374151;
-            margin-bottom: 16px;
-            box-shadow: none;
-        }
-
-        .back-btn:hover {
-            background: #e5e7eb;
-            box-shadow: none;
         }
 
         .hidden {
             display: none;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2rem;
-            }
+        .back-btn {
+            background: #f3f4f6;
+            color: #111827;
+            box-shadow: none;
+            margin-bottom: 24px;
+            width: auto;
+            padding: 0 24px;
+        }
 
-            .card {
-                padding: 32px 24px;
-            }
-
-            .research-grid {
-                grid-template-columns: 1fr;
-            }
+        .back-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="content">
-            <!-- Step 1: Industry Input -->
+            <!-- Step 1: Industry Selection -->
             <div id="step1">
                 <div class="header">
                     <div class="icon-circle">
-                        <img src="sage-logo.png" alt="Sage Logo">
+                        <img src="https://content.sageintacct.com/content/dam/sage-intacct/images/illustrations/homepage-hero-desktop-2x.png" alt="Sage Intacct">
                     </div>
-                    <h1>Industry Research</h1>
+                    <h1>Industry Research Tool</h1>
                     <p class="subtitle">Tell us which industry you'd like to explore</p>
                 </div>
 
@@ -374,6 +361,12 @@
                             <h3>Meta Targeting</h3>
                             <p>Facebook & Instagram ads strategy</p>
                         </div>
+
+                        <div class="research-card" onclick="toggleSelection('keywords')">
+                            <div class="research-icon">🔍</div>
+                            <h3>Keyword Research</h3>
+                            <p>Paid search & SEO keyword opportunities</p>
+                        </div>
                     </div>
 
                     <div class="form-group" style="margin-top: 32px;">
@@ -407,7 +400,8 @@
             conferences: 'https://jakenorcross.app.n8n.cloud/webhook/conferences',
             associations: 'https://jakenorcross.app.n8n.cloud/webhook/associations',
             linkedin: 'https://jakenorcross.app.n8n.cloud/webhook/linkedin',
-            meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta'
+            meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta',
+            keywords: 'https://jakenorcross.app.n8n.cloud/webhook/keyword-research'
         };
 
         let selectedIndustry = '';
