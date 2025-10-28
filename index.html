@@ -223,6 +223,32 @@
             background: linear-gradient(135deg, rgba(0, 77, 0, 0.05) 0%, rgba(0, 220, 6, 0.05) 100%);
         }
 
+        .research-card.placeholder {
+            opacity: 0.5;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .research-card.placeholder:hover {
+            border-color: #e5e7eb;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .research-card.placeholder::after {
+            content: 'COMING SOON';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #fbbf24;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+        }
+
         .research-card h3 {
             font-size: 1.125rem;
             margin: 16px 0 8px;
@@ -366,6 +392,12 @@
                             <h3>Keyword Research</h3>
                             <p>Paid search & SEO keyword opportunities</p>
                         </div>
+
+                        <div class="research-card placeholder" onclick="showComingSoon()">
+                            <div class="research-icon">✍️</div>
+                            <h3>Web Copy Generator</h3>
+                            <p>AI-generated content from keyword research</p>
+                        </div>
                     </div>
 
                     <div class="form-group" style="margin-top: 32px;">
@@ -401,6 +433,7 @@
             linkedin: 'https://jakenorcross.app.n8n.cloud/webhook/linkedin',
             meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta',
             keywords: 'https://jakenorcross.app.n8n.cloud/webhook/keyword-research'
+            // webcopy: 'https://jakenorcross.app.n8n.cloud/webhook/web-copy-generator' // Placeholder for future
         };
 
         let selectedIndustry = '';
@@ -440,6 +473,10 @@
             }
             
             updateSelectionCount();
+        }
+
+        function showComingSoon() {
+            alert('🚀 Web Copy Generator coming soon!\n\nThis feature will automatically generate SEO-optimized web content based on your keyword research.');
         }
 
         function updateSelectionCount() {
