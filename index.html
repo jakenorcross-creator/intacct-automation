@@ -234,9 +234,16 @@
             color: #6b7280;
         }
 
-        .research-icon {
-            font-size: 3rem;
-            margin-bottom: 8px;
+        .research-card .badge {
+            display: inline-block;
+            background: #fbbf24;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+            margin-top: 8px;
         }
 
         .hidden {
@@ -332,39 +339,39 @@
 
                     <div class="research-grid">
                         <div class="research-card" onclick="toggleSelection('publications')">
-                            <div class="research-icon">📚</div>
                             <h3>Publications</h3>
                             <p>Trade magazines, journals, and media outlets</p>
                         </div>
 
                         <div class="research-card" onclick="toggleSelection('conferences')">
-                            <div class="research-icon">📅</div>
                             <h3>Conferences</h3>
                             <p>Industry events with dates and pricing</p>
                         </div>
 
                         <div class="research-card" onclick="toggleSelection('associations')">
-                            <div class="research-icon">🏛️</div>
                             <h3>Associations</h3>
                             <p>Trade associations and organizations</p>
                         </div>
 
                         <div class="research-card" onclick="toggleSelection('linkedin')">
-                            <div class="research-icon">💼</div>
                             <h3>LinkedIn Targeting</h3>
                             <p>LinkedIn advertising strategy</p>
                         </div>
 
                         <div class="research-card" onclick="toggleSelection('meta')">
-                            <div class="research-icon">📱</div>
                             <h3>Meta Targeting</h3>
                             <p>Facebook & Instagram ads strategy</p>
                         </div>
 
                         <div class="research-card" onclick="toggleSelection('keywords')">
-                            <div class="research-icon">🔍</div>
-                            <h3>Keyword Research & Web Content Creation</h3>
-                            <p>Paid search & SEO keywords with AI-generated web content</p>
+                            <h3>Keyword Research</h3>
+                            <p>Paid search & SEO keyword opportunities</p>
+                        </div>
+
+                        <div class="research-card" onclick="toggleSelection('webcontent')">
+                            <h3>Web Content Creation</h3>
+                            <p>Tailored landing page content</p>
+                            <span class="badge">BETA</span>
                         </div>
                     </div>
 
@@ -400,7 +407,8 @@
             associations: 'https://jakenorcross.app.n8n.cloud/webhook/associations',
             linkedin: 'https://jakenorcross.app.n8n.cloud/webhook/linkedin',
             meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta',
-            keywords: 'https://jakenorcross.app.n8n.cloud/webhook/keyword-research'
+            keywords: 'https://jakenorcross.app.n8n.cloud/webhook/keyword-research',
+            webcontent: 'https://jakenorcross.app.n8n.cloud/webhook/content-generation'
         };
 
         let selectedIndustry = '';
