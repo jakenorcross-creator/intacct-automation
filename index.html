@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -109,6 +109,71 @@
             animation: fadeInUp 0.6s ease-out 0.5s both;
         }
 
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .choice-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 40px 32px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .choice-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .choice-card:hover {
+            border-color: #00dc06;
+            box-shadow: 0 15px 40px rgba(0, 220, 6, 0.2);
+            transform: translateY(-8px);
+        }
+
+        .choice-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .choice-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .choice-card p {
+            font-size: 1rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
         .form-group {
             margin-bottom: 32px;
         }
@@ -125,23 +190,48 @@
 
         input[type="text"],
         input[type="email"],
-        select {
+        input[type="date"],
+        select,
+        textarea {
             width: 100%;
-            height: 64px;
             padding: 0 20px;
             font-size: 1.125rem;
             border: 2px solid #e5e7eb;
             border-radius: 16px;
             transition: all 0.3s;
             background: white;
+            font-family: inherit;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        select {
+            height: 64px;
+        }
+
+        textarea {
+            min-height: 120px;
+            padding: 20px;
+            resize: vertical;
         }
 
         input[type="text"]:focus,
         input[type="email"]:focus,
-        select:focus {
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: #00dc06;
             box-shadow: 0 0 0 4px rgba(0, 220, 6, 0.2);
+        }
+
+        input[type="text"]:disabled,
+        input[type="email"]:disabled,
+        select:disabled {
+            background: #f9fafb;
+            color: #6b7280;
+            cursor: not-allowed;
         }
 
         select {
@@ -181,20 +271,26 @@
             transform: none;
         }
 
-        .card-footer {
-            margin-top: 32px;
-            padding-top: 32px;
-            border-top: 1px solid #f3f4f6;
-            text-align: center;
+        .btn.secondary {
+            background: #f3f4f6;
+            color: #111827;
+            box-shadow: none;
+            width: auto;
+            padding: 0 32px;
         }
 
-        .step-indicator {
-            font-size: 0.875rem;
-            color: #9ca3af;
-            font-weight: 300;
+        .btn.secondary:hover {
+            background: #e5e7eb;
         }
 
-        /* Research Options Styles */
+        .back-btn {
+            margin-bottom: 24px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
         .research-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -246,53 +342,202 @@
             margin-top: 8px;
         }
 
-        .hidden {
-            display: none;
+        .webcopy-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
         }
 
-        .back-btn {
-            background: #f3f4f6;
+        .webcopy-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 32px 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .webcopy-card:hover {
+            border-color: #00dc06;
+            box-shadow: 0 10px 30px rgba(0, 220, 6, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .webcopy-card.selected {
+            border-color: #00dc06;
+            background: linear-gradient(135deg, rgba(0, 77, 0, 0.05) 0%, rgba(0, 220, 6, 0.05) 100%);
+        }
+
+        .webcopy-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
             color: #111827;
-            box-shadow: none;
-            margin-bottom: 24px;
-            width: auto;
-            padding: 0 24px;
         }
 
-        .back-btn:hover {
-            background: #e5e7eb;
-            transform: translateY(-2px);
+        .webcopy-card p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .info-banner {
+            background: linear-gradient(135deg, rgba(0, 77, 0, 0.05) 0%, rgba(0, 220, 6, 0.05) 100%);
+            border: 1px solid #00dc06;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-banner-icon {
+            font-size: 20px;
+        }
+
+        .info-banner-text {
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        .info-banner-text strong {
+            color: #111827;
+        }
+
+        .asset-type-selector {
+            margin-top: 32px;
+            margin-bottom: 32px;
+        }
+
+        .asset-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .asset-type-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .asset-type-btn:hover {
+            border-color: #00dc06;
+            background: #f0fdf4;
+        }
+
+        .asset-type-btn.selected {
+            border-color: #00dc06;
+            background: linear-gradient(135deg, rgba(0, 77, 0, 0.08) 0%, rgba(0, 220, 6, 0.08) 100%);
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .dynamic-fields {
+            margin-top: 32px;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .step-indicator {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            font-weight: 300;
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="content">
-            <!-- Step 1: Industry Selection -->
-            <div id="step1">
+            <!-- Page 0: Choice -->
+            <div id="page0">
                 <div class="header">
                     <div class="icon-circle">
                         <img src="sage-logo-green-new.png" alt="Sage">
                     </div>
                     <h1>Industry Research Tool</h1>
+                    <p class="subtitle">What would you like to create?</p>
+                </div>
+
+                <div class="choice-grid">
+                    <div class="choice-card" onclick="selectPath('research')">
+                        <div class="choice-icon">🔍</div>
+                        <h3>Research an Industry</h3>
+                        <p>Discover publications, conferences, associations, targeting strategies, and keyword opportunities for your industry</p>
+                    </div>
+
+                    <div class="choice-card" onclick="selectPath('webcopy')">
+                        <div class="choice-icon">✍️</div>
+                        <h3>Create Web Page Copy</h3>
+                        <p>Generate tailored landing page content for industry pages or specific marketing assets like webinars and ebooks</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 1A: Research Path -->
+            <div id="page1-research" class="hidden">
+                <div class="header">
+                    <h1>Research an Industry</h1>
                     <p class="subtitle">Tell us which industry you'd like to explore</p>
                 </div>
 
                 <div class="card">
-                    <form onsubmit="handleIndustrySubmit(event)">
-                        <div class="form-group">
-                            <label for="industry">Industry Name</label>
-                            <input 
-                                type="text" 
-                                id="industry" 
-                                placeholder="e.g., Healthcare, Technology, Finance..."
-                                required
-                            >
-                        </div>
+                    <button onclick="goToChoice()" class="btn secondary back-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5m7 7l-7-7 7-7"/>
+                        </svg>
+                        Back
+                    </button>
 
+                    <div class="form-group">
+                        <label for="industry-research">Industry Name</label>
+                        <input 
+                            type="text" 
+                            id="industry-research" 
+                            placeholder="e.g., Healthcare, Technology, Finance..."
+                            required
+                        >
+                    </div>
+
+                    <div class="field-row">
                         <div class="form-group">
-                            <label for="region">Region</label>
-                            <select id="region" required>
+                            <label for="region-research">Region</label>
+                            <select id="region-research" required>
                                 <option value="">Select a region...</option>
                                 <option value="US">United States</option>
                                 <option value="CA">Canada</option>
@@ -301,102 +546,165 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="product">Product</label>
-                            <select id="product" required>
+                            <label for="product-research">Product</label>
+                            <select id="product-research" required>
                                 <option value="">Select a product...</option>
                                 <option value="Sage 50">Sage 50</option>
                                 <option value="Sage Intacct">Sage Intacct</option>
                                 <option value="Sage X3">Sage X3</option>
                             </select>
                         </div>
-
-                        <button type="submit" class="btn">
-                            Continue
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14m-7-7l7 7-7 7"/>
-                            </svg>
-                        </button>
-                    </form>
-
-                    <div class="card-footer">
-                        <p class="step-indicator">Step 1 of 2</p>
                     </div>
-                </div>
-            </div>
 
-            <!-- Step 2: Research Options -->
-            <div id="step2" class="hidden">
-                <div class="header">
-                    <h1>Select Research Types</h1>
-                    <p class="subtitle">Choose what you'd like to research for <strong id="selectedIndustry"></strong></p>
-                </div>
-
-                <div class="card">
-                    <button onclick="goBack()" class="btn back-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M19 12H5m7 7l-7-7 7-7"/>
-                        </svg>
-                        Back
-                    </button>
+                    <h3 style="font-size: 1.5rem; margin: 40px 0 24px; color: #111827;">Select Research Types</h3>
 
                     <div class="research-grid">
-                        <div class="research-card" onclick="toggleSelection('publications')">
+                        <div class="research-card" onclick="toggleResearchSelection('publications')">
                             <h3>Publications</h3>
                             <p>Trade magazines, journals, and media outlets</p>
                         </div>
 
-                        <div class="research-card" onclick="toggleSelection('conferences')">
+                        <div class="research-card" onclick="toggleResearchSelection('conferences')">
                             <h3>Conferences</h3>
                             <p>Industry events with dates and pricing</p>
                         </div>
 
-                        <div class="research-card" onclick="toggleSelection('associations')">
+                        <div class="research-card" onclick="toggleResearchSelection('associations')">
                             <h3>Associations</h3>
                             <p>Trade associations and organizations</p>
                         </div>
 
-                        <div class="research-card" onclick="toggleSelection('linkedin')">
+                        <div class="research-card" onclick="toggleResearchSelection('linkedin')">
                             <h3>LinkedIn Targeting</h3>
                             <p>LinkedIn advertising strategy</p>
                         </div>
 
-                        <div class="research-card" onclick="toggleSelection('meta')">
+                        <div class="research-card" onclick="toggleResearchSelection('meta')">
                             <h3>Meta Targeting</h3>
                             <p>Facebook & Instagram ads strategy</p>
                         </div>
 
-                        <div class="research-card" onclick="toggleSelection('keywords')">
+                        <div class="research-card" onclick="toggleResearchSelection('keywords')">
                             <h3>Keyword Research</h3>
                             <p>Paid search & SEO keyword opportunities</p>
                         </div>
-
-                        <div class="research-card" onclick="toggleSelection('webcontent')">
-                            <h3>Web Content Creation</h3>
-                            <p>Tailored landing page content</p>
-                            <span class="badge">BETA</span>
-                        </div>
                     </div>
 
-                    <div class="form-group" style="margin-top: 32px;">
-                        <label for="email">Your Email</label>
+                    <div class="form-group" style="margin-top: 40px;">
+                        <label for="email-research">Your Email</label>
                         <input 
                             type="email" 
-                            id="email" 
+                            id="email-research" 
                             placeholder="you@company.com"
                             required
                         >
                     </div>
 
-                    <button onclick="submitResearch()" class="btn" id="submitBtn" disabled>
+                    <button onclick="submitResearch()" class="btn" id="submitResearchBtn" disabled>
                         Start Research
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14m-7-7l7 7-7 7"/>
                         </svg>
                     </button>
 
-                    <div class="card-footer">
-                        <p class="step-indicator">Step 2 of 2 • <span id="selectionCount">0</span> selected</p>
+                    <div class="step-indicator">
+                        <span id="researchSelectionCount">0</span> research type(s) selected
                     </div>
+                </div>
+            </div>
+
+            <!-- Page 1B: Web Copy Path -->
+            <div id="page1-webcopy" class="hidden">
+                <div class="header">
+                    <h1>Create Web Page Copy</h1>
+                    <p class="subtitle">Let's gather your targeting information</p>
+                </div>
+
+                <div class="card">
+                    <button onclick="goToChoice()" class="btn secondary back-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5m7 7l-7-7 7-7"/>
+                        </svg>
+                        Back
+                    </button>
+
+                    <div class="form-group">
+                        <label for="industry-webcopy">Industry Name</label>
+                        <input 
+                            type="text" 
+                            id="industry-webcopy" 
+                            placeholder="e.g., Healthcare, Technology, Finance..."
+                            required
+                        >
+                    </div>
+
+                    <div class="field-row">
+                        <div class="form-group">
+                            <label for="region-webcopy">Region</label>
+                            <select id="region-webcopy" required>
+                                <option value="">Select a region...</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="UK">United Kingdom</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product-webcopy">Product</label>
+                            <select id="product-webcopy" required>
+                                <option value="">Select a product...</option>
+                                <option value="Sage 50">Sage 50</option>
+                                <option value="Sage Intacct">Sage Intacct</option>
+                                <option value="Sage X3">Sage X3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size: 1.5rem; margin: 40px 0 24px; color: #111827;">Select Page Type</h3>
+
+                    <div class="webcopy-options">
+                        <div class="webcopy-card" onclick="selectPageType('industry')">
+                            <h3>Industry Page</h3>
+                            <p>Broad landing page targeting an entire industry vertical</p>
+                        </div>
+
+                        <div class="webcopy-card" onclick="selectPageType('asset')">
+                            <h3>Asset Page</h3>
+                            <p>Specific page for a webinar, ebook, whitepaper, or other content asset</p>
+                        </div>
+                    </div>
+
+                    <!-- Asset Type Selector (appears when Asset Page is selected) -->
+                    <div id="assetTypeSelector" class="asset-type-selector hidden">
+                        <label>Asset Type</label>
+                        <div class="asset-type-grid">
+                            <button class="asset-type-btn" onclick="selectAssetType('webinar')">📹 Webinar</button>
+                            <button class="asset-type-btn" onclick="selectAssetType('ebook')">📚 Ebook</button>
+                            <button class="asset-type-btn" onclick="selectAssetType('whitepaper')">📄 Whitepaper</button>
+                            <button class="asset-type-btn" onclick="selectAssetType('case-study')">📊 Case Study</button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Fields Container -->
+                    <div id="dynamicFields" class="dynamic-fields hidden"></div>
+
+                    <!-- Email field -->
+                    <div class="form-group" id="emailField" style="margin-top: 40px;" class="hidden">
+                        <label for="email-webcopy">Your Email</label>
+                        <input 
+                            type="email" 
+                            id="email-webcopy" 
+                            placeholder="you@company.com"
+                            required
+                        >
+                    </div>
+
+                    <button onclick="submitWebCopy()" class="btn hidden" id="submitWebCopyBtn">
+                        Generate Web Copy
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14m-7-7l7 7-7 7"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -410,35 +718,44 @@
             linkedin: 'https://jakenorcross.app.n8n.cloud/webhook/linkedin',
             meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta',
             keywords: 'https://jakenorcross.app.n8n.cloud/webhook/keyword-research',
-            webcontent: 'https://jakenorcross.app.n8n.cloud/webhook/content-generation'
+            industryPage: 'https://jakenorcross.app.n8n.cloud/webhook/content-generation',
+            webinar: 'https://jakenorcross.app.n8n.cloud/webhook/7f36cd8f-f594-4cd6-b0b0-5b1eb549bb38'
         };
 
-        let selectedIndustry = '';
-        let selectedRegion = '';
-        let selectedProduct = '';
         let selectedResearch = new Set();
+        let selectedPageType = null;
+        let selectedAssetType = null;
 
-        function handleIndustrySubmit(event) {
-            event.preventDefault();
-            selectedIndustry = document.getElementById('industry').value.trim();
-            selectedRegion = document.getElementById('region').value;
-            selectedProduct = document.getElementById('product').value;
-            
-            if (selectedIndustry && selectedRegion && selectedProduct) {
-                document.getElementById('selectedIndustry').textContent = selectedIndustry;
-                document.getElementById('step1').classList.add('hidden');
-                document.getElementById('step2').classList.remove('hidden');
+        // Path Selection
+        function selectPath(path) {
+            document.getElementById('page0').classList.add('hidden');
+            if (path === 'research') {
+                document.getElementById('page1-research').classList.remove('hidden');
+            } else {
+                document.getElementById('page1-webcopy').classList.remove('hidden');
             }
         }
 
-        function goBack() {
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step1').classList.remove('hidden');
+        function goToChoice() {
+            document.getElementById('page1-research').classList.add('hidden');
+            document.getElementById('page1-webcopy').classList.add('hidden');
+            document.getElementById('page0').classList.remove('hidden');
+            
+            // Reset selections
             selectedResearch.clear();
-            updateSelectionCount();
+            selectedPageType = null;
+            selectedAssetType = null;
+            document.querySelectorAll('.research-card').forEach(card => card.classList.remove('selected'));
+            document.querySelectorAll('.webcopy-card').forEach(card => card.classList.remove('selected'));
+            document.querySelectorAll('.asset-type-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('assetTypeSelector').classList.add('hidden');
+            document.getElementById('dynamicFields').classList.add('hidden');
+            document.getElementById('emailField').classList.add('hidden');
+            document.getElementById('submitWebCopyBtn').classList.add('hidden');
         }
 
-        function toggleSelection(type) {
+        // Research Path Functions
+        function toggleResearchSelection(type) {
             const card = event.currentTarget;
             
             if (selectedResearch.has(type)) {
@@ -449,31 +766,34 @@
                 card.classList.add('selected');
             }
             
-            updateSelectionCount();
+            updateResearchSelectionCount();
         }
 
-        function updateSelectionCount() {
+        function updateResearchSelectionCount() {
             const count = selectedResearch.size;
-            document.getElementById('selectionCount').textContent = count;
-            document.getElementById('submitBtn').disabled = count === 0;
+            document.getElementById('researchSelectionCount').textContent = count;
+            document.getElementById('submitResearchBtn').disabled = count === 0;
         }
 
         async function submitResearch() {
-            const email = document.getElementById('email').value.trim();
+            const industry = document.getElementById('industry-research').value.trim();
+            const region = document.getElementById('region-research').value;
+            const product = document.getElementById('product-research').value;
+            const email = document.getElementById('email-research').value.trim();
             
-            if (!email || selectedResearch.size === 0) {
-                alert('Please select at least one research type and provide your email.');
+            if (!industry || !region || !product || !email || selectedResearch.size === 0) {
+                alert('Please fill in all fields and select at least one research type.');
                 return;
             }
 
-            const submitBtn = document.getElementById('submitBtn');
+            const submitBtn = document.getElementById('submitResearchBtn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Submitting...';
+            submitBtn.innerHTML = '<div class="loading-spinner"></div> Submitting...';
 
             const data = {
-                industry: selectedIndustry,
-                region: selectedRegion,
-                product: selectedProduct,
+                industry: industry,
+                region: region,
+                product: product,
                 email: email
             };
 
@@ -490,23 +810,229 @@
                 alert(`✓ Success! Your research for ${selectedResearch.size} type(s) has been sent to ${email}. Check your inbox in 2-3 minutes.`);
                 
                 // Reset
-                selectedIndustry = '';
-                selectedRegion = '';
-                selectedProduct = '';
+                document.getElementById('industry-research').value = '';
+                document.getElementById('region-research').value = '';
+                document.getElementById('product-research').value = '';
+                document.getElementById('email-research').value = '';
                 selectedResearch.clear();
-                document.getElementById('industry').value = '';
-                document.getElementById('region').value = '';
-                document.getElementById('product').value = '';
-                document.getElementById('email').value = '';
                 document.querySelectorAll('.research-card').forEach(card => {
                     card.classList.remove('selected');
                 });
-                goBack();
+                goToChoice();
             } catch (error) {
                 alert('✗ Something went wrong. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Start Research <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+            }
+        }
+
+        // Web Copy Path Functions
+        function selectPageType(type) {
+            const cards = document.querySelectorAll('.webcopy-card');
+            cards.forEach(card => card.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            selectedPageType = type;
+
+            if (type === 'industry') {
+                // For industry page, just show email and submit
+                document.getElementById('assetTypeSelector').classList.add('hidden');
+                document.getElementById('dynamicFields').classList.add('hidden');
+                document.getElementById('emailField').classList.remove('hidden');
+                document.getElementById('submitWebCopyBtn').classList.remove('hidden');
+                selectedAssetType = null;
+            } else {
+                // For asset page, show asset type selector
+                document.getElementById('assetTypeSelector').classList.remove('hidden');
+                document.getElementById('dynamicFields').classList.add('hidden');
+                document.getElementById('emailField').classList.add('hidden');
+                document.getElementById('submitWebCopyBtn').classList.add('hidden');
+            }
+        }
+
+        function selectAssetType(type) {
+            const buttons = document.querySelectorAll('.asset-type-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            selectedAssetType = type;
+
+            // Show dynamic fields based on asset type
+            showDynamicFields(type);
+        }
+
+        function showDynamicFields(assetType) {
+            const dynamicFieldsContainer = document.getElementById('dynamicFields');
+            const industry = document.getElementById('industry-webcopy').value.trim();
+            const region = document.getElementById('region-webcopy').value;
+            const product = document.getElementById('product-webcopy').value;
+
+            if (!industry || !region || !product) {
+                alert('Please fill in Industry, Region, and Product first.');
+                return;
+            }
+
+            dynamicFieldsContainer.classList.remove('hidden');
+            document.getElementById('emailField').classList.remove('hidden');
+            document.getElementById('submitWebCopyBtn').classList.remove('hidden');
+
+            // Show read-only industry/region/product at top
+            let fieldsHTML = `
+                <div class="info-banner">
+                    <span class="info-banner-icon">ℹ️</span>
+                    <div class="info-banner-text">
+                        <strong>Targeting:</strong> ${industry} | ${region} | ${product}
+                    </div>
+                </div>
+            `;
+
+            if (assetType === 'webinar') {
+                fieldsHTML += `
+                    <div class="form-group">
+                        <label for="persona-role">Persona Role</label>
+                        <input type="text" id="persona-role" placeholder="e.g., CFO, Finance Director, Controller" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="persona-description">Persona Description</label>
+                        <textarea id="persona-description" placeholder="Who they are, their responsibilities, and reporting line..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="persona-pains">Persona Pains</label>
+                        <textarea id="persona-pains" placeholder="Their key challenges, frustrations, and risks..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="key-messages">Webinar Key Messages</label>
+                        <textarea id="key-messages" placeholder="Core product capabilities and value messages to emphasise..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buyer-stage">Buyer Stage Focus</label>
+                        <select id="buyer-stage" required>
+                            <option value="">Select buyer stage...</option>
+                            <option value="Problem awareness">Problem awareness</option>
+                            <option value="Solution exploration">Solution exploration</option>
+                            <option value="Vendor comparison">Vendor comparison</option>
+                            <option value="Vendor selection / justification">Vendor selection / justification</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reference-copy">Supporting Reference Copy (Optional)</label>
+                        <textarea id="reference-copy" placeholder="Optional: On-page product or solution copy to stay aligned with..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="webinar-topics">Webinar Topics</label>
+                        <textarea id="webinar-topics" placeholder="Define the core content pillars the page must cover..." required></textarea>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="form-group">
+                            <label for="webinar-date">Webinar Date</label>
+                            <input type="date" id="webinar-date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="webinar-times">Webinar Times</label>
+                            <input type="text" id="webinar-times" placeholder="e.g., 10:00-11:00 AM EST" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="speakers">Speakers</label>
+                        <textarea id="speakers" placeholder="List speaker names, roles, and any provided bios (one per line or JSON format)..." required></textarea>
+                    </div>
+                `;
+            } else {
+                // Placeholder for future asset types
+                fieldsHTML += `
+                    <div class="info-banner">
+                        <span class="info-banner-icon">🚧</span>
+                        <div class="info-banner-text">
+                            <strong>${assetType}</strong> asset type fields are coming soon. For now, please use the Webinar option.
+                        </div>
+                    </div>
+                `;
+            }
+
+            dynamicFieldsContainer.innerHTML = fieldsHTML;
+        }
+
+        async function submitWebCopy() {
+            const industry = document.getElementById('industry-webcopy').value.trim();
+            const region = document.getElementById('region-webcopy').value;
+            const product = document.getElementById('product-webcopy').value;
+            const email = document.getElementById('email-webcopy').value.trim();
+
+            if (!industry || !region || !product || !email || !selectedPageType) {
+                alert('Please fill in all required fields and select a page type.');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitWebCopyBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="loading-spinner"></div> Generating...';
+
+            let data = {
+                industry: industry,
+                region: region,
+                product: product,
+                email: email
+            };
+
+            let webhookUrl = '';
+
+            if (selectedPageType === 'industry') {
+                webhookUrl = WEBHOOK_URLS.industryPage;
+            } else if (selectedPageType === 'asset' && selectedAssetType === 'webinar') {
+                webhookUrl = WEBHOOK_URLS.webinar;
+                
+                // Collect webinar-specific fields
+                data.persona_role = document.getElementById('persona-role')?.value.trim() || '';
+                data.persona_description = document.getElementById('persona-description')?.value.trim() || '';
+                data.persona_pains = document.getElementById('persona-pains')?.value.trim() || '';
+                data.key_messages = document.getElementById('key-messages')?.value.trim() || '';
+                data.buyer_stage_focus = document.getElementById('buyer-stage')?.value || '';
+                data.reference_copy = document.getElementById('reference-copy')?.value.trim() || '';
+                data.webinar_topics = document.getElementById('webinar-topics')?.value.trim() || '';
+                data.date = document.getElementById('webinar-date')?.value || '';
+                data.times = document.getElementById('webinar-times')?.value.trim() || '';
+                
+                // Parse speakers (accept JSON or line-separated format)
+                const speakersInput = document.getElementById('speakers')?.value.trim() || '';
+                try {
+                    data.speakers = JSON.parse(speakersInput);
+                } catch {
+                    // If not valid JSON, split by newlines
+                    data.speakers = speakersInput.split('\n').filter(s => s.trim()).map(s => ({ name: s.trim() }));
+                }
+            } else {
+                alert('This asset type is not yet supported.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                return;
+            }
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert(`✓ Success! Your web page copy is being generated and will be sent to ${email} shortly.`);
+                    goToChoice();
+                } else {
+                    throw new Error('Request failed');
+                }
+            } catch (error) {
+                alert('✗ Something went wrong. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
             }
         }
     </script>
