@@ -942,7 +942,7 @@
 
                     <div class="form-group">
                         <label for="speakers">Speakers</label>
-                        <textarea id="speakers" placeholder="List speaker names, roles, and any provided bios (one per line or JSON format)..." required></textarea>
+                        <textarea id="speakers" placeholder="Enter speaker names separated by commas (e.g., John Smith, Jane Doe) or one per line..." required></textarea>
                     </div>
 
                     <div class="form-group">
@@ -1005,14 +1005,8 @@
                 data.date = document.getElementById('webinar-date')?.value || '';
                 data.times = document.getElementById('webinar-times')?.value.trim() || '';
                 
-                // Parse speakers (accept JSON or line-separated format)
-                const speakersInput = document.getElementById('speakers')?.value.trim() || '';
-                try {
-                    data.speakers = JSON.parse(speakersInput);
-                } catch {
-                    // If not valid JSON, split by newlines
-                    data.speakers = speakersInput.split('\n').filter(s => s.trim()).map(s => ({ name: s.trim() }));
-                }
+                // Send speakers as simple string (comma-separated or line-separated)
+                data.speakers = document.getElementById('speakers')?.value.trim() || '';
 
                 // Add form_id
                 data.form_id = document.getElementById('form-id')?.value.trim() || '';
