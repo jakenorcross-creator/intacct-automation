@@ -944,6 +944,11 @@
                         <label for="speakers">Speakers</label>
                         <textarea id="speakers" placeholder="List speaker names, roles, and any provided bios (one per line or JSON format)..." required></textarea>
                     </div>
+
+                    <div class="form-group">
+                        <label for="form-id">Form ID</label>
+                        <input type="text" id="form-id" placeholder="e.g., gate-c250ad9c-b530-469a-ac48-8c8ad523fe3f" required>
+                    </div>
                 `;
             } else {
                 // Placeholder for future asset types
@@ -1008,6 +1013,9 @@
                     // If not valid JSON, split by newlines
                     data.speakers = speakersInput.split('\n').filter(s => s.trim()).map(s => ({ name: s.trim() }));
                 }
+
+                // Add form_id
+                data.form_id = document.getElementById('form-id')?.value.trim() || '';
             } else {
                 alert('This asset type is not yet supported.');
                 submitBtn.disabled = false;
