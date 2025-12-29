@@ -207,13 +207,14 @@
         input[type="email"],
         input[type="date"],
         select {
-            height: 64px;
+            height: 60px;
         }
 
         textarea {
+            padding: 16px 20px;
             min-height: 120px;
-            padding: 20px;
             resize: vertical;
+            line-height: 1.6;
         }
 
         input[type="text"]:focus,
@@ -223,86 +224,84 @@
         textarea:focus {
             outline: none;
             border-color: #00dc06;
-            box-shadow: 0 0 0 4px rgba(0, 220, 6, 0.2);
-        }
-
-        input[type="text"]:disabled,
-        input[type="email"]:disabled,
-        select:disabled {
-            background: #f9fafb;
-            color: #6b7280;
-            cursor: not-allowed;
+            box-shadow: 0 0 0 4px rgba(0, 220, 6, 0.1);
         }
 
         select {
             cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 20px;
+            padding-right: 48px;
         }
 
         .btn {
-            width: 100%;
-            height: 64px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 36px;
             font-size: 1.125rem;
             font-weight: 600;
-            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
-            color: white;
             border: none;
             border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(0, 220, 6, 0.3);
-            display: flex;
-            align-items: center;
+            text-decoration: none;
+            width: 100%;
             justify-content: center;
-            gap: 8px;
         }
 
-        .btn:hover {
+        .btn:not(.secondary) {
+            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
+            color: white;
+            box-shadow: 0 8px 24px rgba(0, 220, 6, 0.3);
+        }
+
+        .btn:not(.secondary):hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(0, 220, 6, 0.4);
+            box-shadow: 0 12px 32px rgba(0, 220, 6, 0.4);
         }
 
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
+        .btn:not(.secondary):disabled {
+            background: #d1d5db;
+            color: #6b7280;
             cursor: not-allowed;
+            box-shadow: none;
             transform: none;
         }
 
         .btn.secondary {
-            background: #f3f4f6;
-            color: #111827;
-            box-shadow: none;
+            background: transparent;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
             width: auto;
-            padding: 0 32px;
+            padding: 12px 24px;
+            font-size: 1rem;
         }
 
         .btn.secondary:hover {
-            background: #e5e7eb;
+            border-color: #00dc06;
+            color: #111827;
         }
 
         .back-btn {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
 
-        .hidden {
-            display: none;
-        }
-
-        .research-grid {
+        .research-cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
         .research-card {
             background: white;
             border: 2px solid #e5e7eb;
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
@@ -310,90 +309,97 @@
 
         .research-card:hover {
             border-color: #00dc06;
-            box-shadow: 0 10px 30px rgba(0, 220, 6, 0.2);
             transform: translateY(-4px);
         }
 
         .research-card.selected {
             border-color: #00dc06;
-            background: linear-gradient(135deg, rgba(0, 77, 0, 0.05) 0%, rgba(0, 220, 6, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(0, 77, 0, 0.08) 0%, rgba(0, 220, 6, 0.08) 100%);
         }
 
-        .research-card h3 {
-            font-size: 1.125rem;
-            margin: 16px 0 8px;
+        .research-card .icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .research-card h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
             color: #111827;
         }
 
-        .research-card p {
+        .selection-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
+            color: white;
+            border-radius: 50%;
             font-size: 0.875rem;
-            color: #6b7280;
+            font-weight: 600;
+            margin-left: 8px;
         }
 
-        .research-card .badge {
-            display: inline-block;
-            background: #fbbf24;
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 4px;
-            letter-spacing: 0.05em;
-            margin-top: 8px;
+        .hidden {
+            display: none !important;
         }
 
         .webcopy-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .webcopy-card {
             background: white;
             border: 2px solid #e5e7eb;
             border-radius: 16px;
-            padding: 32px 24px;
+            padding: 24px;
             cursor: pointer;
             transition: all 0.3s;
-            text-align: center;
+            text-align: left;
         }
 
         .webcopy-card:hover {
             border-color: #00dc06;
-            box-shadow: 0 10px 30px rgba(0, 220, 6, 0.2);
             transform: translateY(-4px);
         }
 
         .webcopy-card.selected {
             border-color: #00dc06;
-            background: linear-gradient(135deg, rgba(0, 77, 0, 0.05) 0%, rgba(0, 220, 6, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(0, 77, 0, 0.08) 0%, rgba(0, 220, 6, 0.08) 100%);
         }
 
         .webcopy-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 8px;
+            font-size: 1.125rem;
+            font-weight: 600;
             color: #111827;
+            margin-bottom: 8px;
         }
 
         .webcopy-card p {
             font-size: 0.875rem;
             color: #6b7280;
+            line-height: 1.5;
         }
 
         .info-banner {
-            background: linear-gradient(135deg, rgba(0, 77, 0, 0.05) 0%, rgba(0, 220, 6, 0.05) 100%);
-            border: 1px solid #00dc06;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
             border-radius: 12px;
             padding: 16px 20px;
-            margin-bottom: 32px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .info-banner-icon {
-            font-size: 20px;
+            font-size: 1.25rem;
+            flex-shrink: 0;
         }
 
         .info-banner-text {
@@ -412,7 +418,7 @@
 
         .asset-type-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 16px;
         }
 
@@ -429,7 +435,7 @@
             color: #374151;
         }
 
-        .asset-type-btn:hover {
+        .asset-type-btn:hover:not(.disabled) {
             border-color: #00dc06;
             background: #f0fdf4;
         }
@@ -439,6 +445,23 @@
             background: linear-gradient(135deg, rgba(0, 77, 0, 0.08) 0%, rgba(0, 220, 6, 0.08) 100%);
             color: #111827;
             font-weight: 600;
+        }
+
+        .asset-type-btn.disabled {
+            background: #f9fafb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            border-color: #e5e7eb;
+        }
+
+        .asset-type-btn .coming-soon {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: #9ca3af;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .dynamic-fields {
@@ -478,6 +501,95 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .collapsible-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .collapsible-header:hover {
+            background: #f3f4f6;
+        }
+
+        .collapsible-header h4 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .collapsible-header .optional-badge {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: #9ca3af;
+            background: #e5e7eb;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .collapsible-chevron {
+            transition: transform 0.3s;
+            color: #9ca3af;
+        }
+
+        .collapsible-section.open .collapsible-chevron {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .collapsible-section.open .collapsible-content {
+            display: block;
+        }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-row input {
+            height: 48px;
+            font-size: 1rem;
+        }
+
+        .stat-row .stat-value-input {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .field-hint {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 8px;
+            font-weight: 400;
         }
     </style>
 </head>
@@ -549,48 +661,41 @@
                             <label for="product-research">Product</label>
                             <select id="product-research" required>
                                 <option value="">Select a product...</option>
-                                <option value="Sage 50">Sage 50</option>
                                 <option value="Sage Intacct">Sage Intacct</option>
-                                <option value="Sage X3">Sage X3</option>
+                                <option value="Sage 50">Sage 50</option>
                             </select>
                         </div>
                     </div>
 
-                    <h3 style="font-size: 1.5rem; margin: 40px 0 24px; color: #111827;">Select Research Types</h3>
-
-                    <div class="research-grid">
+                    <label>What would you like to research?</label>
+                    <div class="research-cards-grid">
                         <div class="research-card" onclick="toggleResearchSelection('publications')">
-                            <h3>Publications</h3>
-                            <p>Trade magazines, journals, and media outlets</p>
+                            <div class="icon">📰</div>
+                            <h4>Publications</h4>
                         </div>
-
                         <div class="research-card" onclick="toggleResearchSelection('conferences')">
-                            <h3>Conferences</h3>
-                            <p>Industry events with dates and pricing</p>
+                            <div class="icon">🎤</div>
+                            <h4>Conferences</h4>
                         </div>
-
                         <div class="research-card" onclick="toggleResearchSelection('associations')">
-                            <h3>Associations</h3>
-                            <p>Trade associations and organizations</p>
+                            <div class="icon">🤝</div>
+                            <h4>Associations</h4>
                         </div>
-
                         <div class="research-card" onclick="toggleResearchSelection('linkedin')">
-                            <h3>LinkedIn Targeting</h3>
-                            <p>LinkedIn advertising strategy</p>
+                            <div class="icon">💼</div>
+                            <h4>LI Targeting</h4>
                         </div>
-
                         <div class="research-card" onclick="toggleResearchSelection('meta')">
-                            <h3>Meta Targeting</h3>
-                            <p>Facebook & Instagram ads strategy</p>
+                            <div class="icon">📱</div>
+                            <h4>Meta Targeting</h4>
                         </div>
-
                         <div class="research-card" onclick="toggleResearchSelection('keywords')">
-                            <h3>Keyword Research</h3>
-                            <p>Paid search & SEO keyword opportunities</p>
+                            <div class="icon">🔑</div>
+                            <h4>Keyword Ideas</h4>
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-top: 40px;">
+                    <div class="form-group">
                         <label for="email-research">Your Email</label>
                         <input 
                             type="email" 
@@ -602,14 +707,11 @@
 
                     <button onclick="submitResearch()" class="btn" id="submitResearchBtn" disabled>
                         Start Research
+                        <span class="selection-count" id="researchSelectionCount">0</span>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14m-7-7l7 7-7 7"/>
                         </svg>
                     </button>
-
-                    <div class="step-indicator">
-                        <span id="researchSelectionCount">0</span> research type(s) selected
-                    </div>
                 </div>
             </div>
 
@@ -617,7 +719,7 @@
             <div id="page1-webcopy" class="hidden">
                 <div class="header">
                     <h1>Create Web Page Copy</h1>
-                    <p class="subtitle">Let's gather your targeting information</p>
+                    <p class="subtitle">Generate landing page content tailored to your needs</p>
                 </div>
 
                 <div class="card">
@@ -633,7 +735,7 @@
                         <input 
                             type="text" 
                             id="industry-webcopy" 
-                            placeholder="e.g., Healthcare, Technology, Finance..."
+                            placeholder="e.g., Healthcare, Community Health Centers, Nonprofit..."
                             required
                         >
                     </div>
@@ -653,9 +755,8 @@
                             <label for="product-webcopy">Product</label>
                             <select id="product-webcopy" required>
                                 <option value="">Select a product...</option>
-                                <option value="Sage 50">Sage 50</option>
                                 <option value="Sage Intacct">Sage Intacct</option>
-                                <option value="Sage X3">Sage X3</option>
+                                <option value="Sage 50">Sage 50</option>
                             </select>
                         </div>
                     </div>
@@ -679,9 +780,11 @@
                         <label>Asset Type</label>
                         <div class="asset-type-grid">
                             <button class="asset-type-btn" onclick="selectAssetType('webinar')">📹 Webinar</button>
-                            <button class="asset-type-btn" onclick="selectAssetType('ebook')">📚 Ebook</button>
-                            <button class="asset-type-btn" onclick="selectAssetType('whitepaper')">📄 Whitepaper</button>
-                            <button class="asset-type-btn" onclick="selectAssetType('case-study')">📊 Case Study</button>
+                            <button class="asset-type-btn" onclick="selectAssetType('report')">📊 Report / eBook</button>
+                            <button class="asset-type-btn disabled" onclick="return false;">
+                                📋 Case Study
+                                <span class="coming-soon">Coming Soon</span>
+                            </button>
                         </div>
                     </div>
 
@@ -719,7 +822,8 @@
             meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta',
             keywords: 'https://jakenorcross.app.n8n.cloud/webhook/keyword-research',
             industryPage: 'https://jakenorcross.app.n8n.cloud/webhook/content-generation',
-            webinar: 'https://jakenorcross.app.n8n.cloud/webhook/webinar-content'
+            webinar: 'https://jakenorcross.app.n8n.cloud/webhook/webinar-content',
+            report: 'https://jakenorcross.app.n8n.cloud/webhook/report-landing-page'
         };
 
         let selectedResearch = new Set();
@@ -851,6 +955,8 @@
         }
 
         function selectAssetType(type) {
+            if (type === 'case-study') return; // Disabled
+            
             const buttons = document.querySelectorAll('.asset-type-btn');
             buttons.forEach(btn => btn.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
@@ -858,6 +964,11 @@
 
             // Show dynamic fields based on asset type
             showDynamicFields(type);
+        }
+
+        function toggleCollapsible(element) {
+            const section = element.closest('.collapsible-section');
+            section.classList.toggle('open');
         }
 
         function showDynamicFields(assetType) {
@@ -950,13 +1061,60 @@
                         <input type="text" id="form-id" placeholder="e.g., gate-c250ad9c-b530-469a-ac48-8c8ad523fe3f" required>
                     </div>
                 `;
+            } else if (assetType === 'report') {
+                fieldsHTML += `
+                    <div class="form-group">
+                        <label for="report-content">eBook / Report Content</label>
+                        <textarea id="report-content" style="min-height: 200px;" placeholder="Paste the full text content of your eBook, report, whitepaper, or data sheet here. The more context you provide, the better the landing page copy will be tailored to your asset." required></textarea>
+                        <p class="field-hint">The entire document content will be analyzed to extract themes, audience, pain points, and key statistics for the landing page.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gate-id">Gate ID</label>
+                        <input type="text" id="gate-id" placeholder="e.g., gate-d1803ce6-144c-4b30-aba5-6a11393d3f44" required>
+                        <p class="field-hint">This populates the download form on the landing page.</p>
+                    </div>
+
+                    <div class="collapsible-section">
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <h4>
+                                Override Statistics
+                                <span class="optional-badge">Optional</span>
+                            </h4>
+                            <svg class="collapsible-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                        <div class="collapsible-content">
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 16px;">Leave blank to let AI extract the most compelling statistics from your content. Override here if you have specific stats you want featured.</p>
+                            
+                            <label style="margin-bottom: 12px; display: block;">Stat 1</label>
+                            <div class="stat-row">
+                                <input type="text" id="stat-1-value" class="stat-value-input" placeholder="e.g., 83%">
+                                <input type="text" id="stat-1-label" placeholder="e.g., demand better data visibility">
+                            </div>
+
+                            <label style="margin-bottom: 12px; display: block;">Stat 2</label>
+                            <div class="stat-row">
+                                <input type="text" id="stat-2-value" class="stat-value-input" placeholder="e.g., 2X">
+                                <input type="text" id="stat-2-label" placeholder="e.g., more likely to drive growth">
+                            </div>
+
+                            <label style="margin-bottom: 12px; display: block;">Stat 3</label>
+                            <div class="stat-row">
+                                <input type="text" id="stat-3-value" class="stat-value-input" placeholder="e.g., 96%">
+                                <input type="text" id="stat-3-label" placeholder="e.g., use AI in daily finance processes">
+                            </div>
+                        </div>
+                    </div>
+                `;
             } else {
                 // Placeholder for future asset types
                 fieldsHTML += `
                     <div class="info-banner">
                         <span class="info-banner-icon">🚧</span>
                         <div class="info-banner-text">
-                            <strong>${assetType}</strong> asset type fields are coming soon. For now, please use the Webinar option.
+                            <strong>${assetType}</strong> asset type fields are coming soon. For now, please use the Webinar or Report/eBook option.
                         </div>
                     </div>
                 `;
@@ -1010,6 +1168,47 @@
 
                 // Add form_id
                 data.form_id = document.getElementById('form-id')?.value.trim() || '';
+            } else if (selectedPageType === 'asset' && selectedAssetType === 'report') {
+                webhookUrl = WEBHOOK_URLS.report;
+                
+                // Collect report-specific fields
+                data.report_content = document.getElementById('report-content')?.value.trim() || '';
+                data.gate_id = document.getElementById('gate-id')?.value.trim() || '';
+                
+                // Optional stat overrides (only include if filled)
+                const stat1Value = document.getElementById('stat-1-value')?.value.trim() || '';
+                const stat1Label = document.getElementById('stat-1-label')?.value.trim() || '';
+                const stat2Value = document.getElementById('stat-2-value')?.value.trim() || '';
+                const stat2Label = document.getElementById('stat-2-label')?.value.trim() || '';
+                const stat3Value = document.getElementById('stat-3-value')?.value.trim() || '';
+                const stat3Label = document.getElementById('stat-3-label')?.value.trim() || '';
+                
+                if (stat1Value || stat1Label) {
+                    data.stat_1_value = stat1Value;
+                    data.stat_1_label = stat1Label;
+                }
+                if (stat2Value || stat2Label) {
+                    data.stat_2_value = stat2Value;
+                    data.stat_2_label = stat2Label;
+                }
+                if (stat3Value || stat3Label) {
+                    data.stat_3_value = stat3Value;
+                    data.stat_3_label = stat3Label;
+                }
+
+                // Validation
+                if (!data.report_content) {
+                    alert('Please paste the eBook/report content.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                    return;
+                }
+                if (!data.gate_id) {
+                    alert('Please enter the Gate ID.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                    return;
+                }
             } else {
                 alert('This asset type is not yet supported.');
                 submitBtn.disabled = false;
