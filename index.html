@@ -591,6 +591,96 @@
             margin-top: 8px;
             font-weight: 400;
         }
+
+        /* File Upload Styles */
+        .file-upload-wrapper {
+            position: relative;
+        }
+
+        .file-upload-input {
+            width: 100%;
+            padding: 24px 20px;
+            font-size: 1rem;
+            border: 2px dashed #e5e7eb;
+            border-radius: 16px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-input:hover {
+            border-color: #00dc06;
+            background: #f0fdf4;
+        }
+
+        .file-upload-input:focus {
+            outline: none;
+            border-color: #00dc06;
+            box-shadow: 0 0 0 4px rgba(0, 220, 6, 0.1);
+        }
+
+        .file-upload-input::file-selector-button {
+            padding: 10px 20px;
+            margin-right: 16px;
+            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-upload-input::file-selector-button:hover {
+            transform: scale(1.02);
+        }
+
+        .file-selected-info {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+        }
+
+        .file-selected-info.visible {
+            display: flex;
+        }
+
+        .file-selected-info .file-icon {
+            font-size: 1.5rem;
+        }
+
+        .file-selected-info .file-details {
+            flex: 1;
+        }
+
+        .file-selected-info .file-name {
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .file-selected-info .file-size {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .file-selected-info .file-remove {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .file-selected-info .file-remove:hover {
+            color: #ef4444;
+        }
     </style>
 </head>
 <body>
@@ -829,6 +919,74 @@
         let selectedResearch = new Set();
         let selectedPageType = null;
         let selectedAssetType = null;
+        let selectedFile = null; // Store the selected file
+
+        // Convert file to Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    // Remove the data URL prefix (e.g., "data:application/pdf;base64,")
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Format file size for display
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Handle file selection
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const fileInfo = document.getElementById('file-selected-info');
+            
+            if (file) {
+                // Validate file type
+                if (file.type !== 'application/pdf') {
+                    alert('Please upload a PDF file.');
+                    event.target.value = '';
+                    selectedFile = null;
+                    fileInfo.classList.remove('visible');
+                    return;
+                }
+                
+                // Validate file size (max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size must be under 10MB.');
+                    event.target.value = '';
+                    selectedFile = null;
+                    fileInfo.classList.remove('visible');
+                    return;
+                }
+                
+                selectedFile = file;
+                
+                // Update UI
+                document.getElementById('file-name').textContent = file.name;
+                document.getElementById('file-size').textContent = formatFileSize(file.size);
+                fileInfo.classList.add('visible');
+            } else {
+                selectedFile = null;
+                fileInfo.classList.remove('visible');
+            }
+        }
+
+        // Remove selected file
+        function removeFile() {
+            const fileInput = document.getElementById('report-file');
+            fileInput.value = '';
+            selectedFile = null;
+            document.getElementById('file-selected-info').classList.remove('visible');
+        }
 
         // Path Selection
         function selectPath(path) {
@@ -849,6 +1007,7 @@
             selectedResearch.clear();
             selectedPageType = null;
             selectedAssetType = null;
+            selectedFile = null;
             document.querySelectorAll('.research-card').forEach(card => card.classList.remove('selected'));
             document.querySelectorAll('.webcopy-card').forEach(card => card.classList.remove('selected'));
             document.querySelectorAll('.asset-type-btn').forEach(btn => btn.classList.remove('selected'));
@@ -945,6 +1104,7 @@
                 document.getElementById('emailField').classList.remove('hidden');
                 document.getElementById('submitWebCopyBtn').classList.remove('hidden');
                 selectedAssetType = null;
+                selectedFile = null;
             } else {
                 // For asset page, show asset type selector
                 document.getElementById('assetTypeSelector').classList.remove('hidden');
@@ -961,6 +1121,7 @@
             buttons.forEach(btn => btn.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
             selectedAssetType = type;
+            selectedFile = null; // Reset file when changing asset type
 
             // Show dynamic fields based on asset type
             showDynamicFields(type);
@@ -1064,9 +1225,26 @@
             } else if (assetType === 'report') {
                 fieldsHTML += `
                     <div class="form-group">
-                        <label for="report-content">eBook / Report Content</label>
-                        <textarea id="report-content" style="min-height: 200px;" placeholder="Paste the full text content of your eBook, report, whitepaper, or data sheet here. The more context you provide, the better the landing page copy will be tailored to your asset." required></textarea>
-                        <p class="field-hint">The entire document content will be analyzed to extract themes, audience, pain points, and key statistics for the landing page.</p>
+                        <label for="report-file">Upload eBook / Report (PDF)</label>
+                        <div class="file-upload-wrapper">
+                            <input 
+                                type="file" 
+                                id="report-file" 
+                                accept=".pdf,application/pdf" 
+                                class="file-upload-input"
+                                onchange="handleFileSelect(event)"
+                                required
+                            >
+                            <div id="file-selected-info" class="file-selected-info">
+                                <span class="file-icon">📄</span>
+                                <div class="file-details">
+                                    <div id="file-name" class="file-name"></div>
+                                    <div id="file-size" class="file-size"></div>
+                                </div>
+                                <button type="button" class="file-remove" onclick="removeFile()" title="Remove file">✕</button>
+                            </div>
+                        </div>
+                        <p class="field-hint">Upload a PDF file (max 10MB). The document will be analyzed to extract themes, audience, and key statistics for the landing page.</p>
                     </div>
 
                     <div class="form-group">
@@ -1171,9 +1349,38 @@
             } else if (selectedPageType === 'asset' && selectedAssetType === 'report') {
                 webhookUrl = WEBHOOK_URLS.report;
                 
-                // Collect report-specific fields
-                data.report_content = document.getElementById('report-content')?.value.trim() || '';
+                // Validate file is selected
+                if (!selectedFile) {
+                    alert('Please upload an eBook/report PDF file.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                    return;
+                }
+                
+                // Convert file to Base64
+                try {
+                    submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing file...';
+                    data.file_data = await fileToBase64(selectedFile);
+                    data.file_name = selectedFile.name;
+                    data.file_type = selectedFile.type;
+                    submitBtn.innerHTML = '<div class="loading-spinner"></div> Generating...';
+                } catch (err) {
+                    console.error('File read error:', err);
+                    alert('Error reading file. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                    return;
+                }
+                
                 data.gate_id = document.getElementById('gate-id')?.value.trim() || '';
+                
+                // Validation for gate_id
+                if (!data.gate_id) {
+                    alert('Please enter the Gate ID.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                    return;
+                }
                 
                 // Optional stat overrides (only include if filled)
                 const stat1Value = document.getElementById('stat-1-value')?.value.trim() || '';
@@ -1194,20 +1401,6 @@
                 if (stat3Value || stat3Label) {
                     data.stat_3_value = stat3Value;
                     data.stat_3_label = stat3Label;
-                }
-
-                // Validation
-                if (!data.report_content) {
-                    alert('Please paste the eBook/report content.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
-                    return;
-                }
-                if (!data.gate_id) {
-                    alert('Please enter the Gate ID.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
-                    return;
                 }
             } else {
                 alert('This asset type is not yet supported.');
