@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <title>Verso</title>
     <style>
         * {
@@ -681,6 +682,198 @@
         .file-selected-info .file-remove:hover {
             color: #ef4444;
         }
+
+        /* Results Preview Styles */
+        .results-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .results-actions .btn {
+            min-width: 180px;
+            width: auto;
+        }
+
+        .results-preview {
+            background: white;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .report-header {
+            text-align: center;
+            padding-bottom: 32px;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 32px;
+        }
+
+        .report-header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #004d00 0%, #00dc06 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .report-meta {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .association-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .association-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .association-card h3 {
+            color: #008146;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .association-card .website {
+            color: #008146;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .association-card .website:hover {
+            text-decoration: underline;
+        }
+
+        .association-card .description {
+            color: #4b5563;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .data-section {
+            margin-top: 16px;
+        }
+
+        .data-section h4 {
+            font-size: 1rem;
+            color: #374151;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .data-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .data-label {
+            font-weight: 600;
+            color: #374151;
+            min-width: 140px;
+        }
+
+        .data-value {
+            color: #4b5563;
+            flex: 1;
+        }
+
+        .data-value.not-found {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .data-value a {
+            color: #008146;
+            text-decoration: none;
+        }
+
+        .data-value a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 48px;
+            color: #6b7280;
+        }
+
+        .error-message h2 {
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay h2 {
+            margin-top: 24px;
+            color: #374151;
+        }
+
+        .loading-overlay p {
+            color: #6b7280;
+            margin-top: 8px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .loading-spinner-large {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #00dc06;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .report-footer {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #e5e7eb;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
@@ -900,14 +1093,50 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Results Preview Page -->
+            <div id="page-results" class="hidden">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h1>Research Results</h1>
+                        <p class="subtitle" id="results-subtitle"></p>
+                    </div>
+
+                    <div class="results-actions">
+                        <button onclick="downloadPDF()" class="btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Download PDF
+                        </button>
+                        <button onclick="startNewResearch()" class="btn secondary">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            New Research
+                        </button>
+                    </div>
+
+                    <div class="results-preview" id="results-preview">
+                        <!-- Results will be rendered here -->
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner-large"></div>
+        <h2 id="loading-title">Researching...</h2>
+        <p id="loading-message">This may take 30-60 seconds. We're searching multiple sources and extracting detailed information.</p>
     </div>
 
     <script>
         const WEBHOOK_URLS = {
             publications: 'https://jakenorcross.app.n8n.cloud/webhook/publications',
             conferences: 'https://jakenorcross.app.n8n.cloud/webhook/conferences',
-            associations: 'https://jakenorcross.app.n8n.cloud/webhook/associations',
+            associations: 'https://jakenorcross.app.n8n.cloud/webhook/associations-v2',
             linkedin: 'https://jakenorcross.app.n8n.cloud/webhook/linkedin',
             meta: 'https://jakenorcross.app.n8n.cloud/webhook/meta',
             keywords: 'https://jakenorcross.app.n8n.cloud/webhook/keyword-research',
@@ -916,17 +1145,20 @@
             report: 'https://jakenorcross.app.n8n.cloud/webhook/report-landing-page'
         };
 
+        // Research types that support preview (others will use email)
+        const PREVIEW_SUPPORTED = ['associations'];
+
         let selectedResearch = new Set();
         let selectedPageType = null;
         let selectedAssetType = null;
-        let selectedFile = null; // Store the selected file
+        let selectedFile = null;
+        let currentResultsData = null;
 
         // Convert file to Base64
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = () => {
-                    // Remove the data URL prefix (e.g., "data:application/pdf;base64,")
                     const base64 = reader.result.split(',')[1];
                     resolve(base64);
                 };
@@ -950,7 +1182,6 @@
             const fileInfo = document.getElementById('file-selected-info');
             
             if (file) {
-                // Validate file type
                 if (file.type !== 'application/pdf') {
                     alert('Please upload a PDF file.');
                     event.target.value = '';
@@ -959,7 +1190,6 @@
                     return;
                 }
                 
-                // Validate file size (max 10MB)
                 if (file.size > 10 * 1024 * 1024) {
                     alert('File size must be under 10MB.');
                     event.target.value = '';
@@ -969,8 +1199,6 @@
                 }
                 
                 selectedFile = file;
-                
-                // Update UI
                 document.getElementById('file-name').textContent = file.name;
                 document.getElementById('file-size').textContent = formatFileSize(file.size);
                 fileInfo.classList.add('visible');
@@ -1001,13 +1229,14 @@
         function goToChoice() {
             document.getElementById('page1-research').classList.add('hidden');
             document.getElementById('page1-webcopy').classList.add('hidden');
+            document.getElementById('page-results').classList.add('hidden');
             document.getElementById('page0').classList.remove('hidden');
             
-            // Reset selections
             selectedResearch.clear();
             selectedPageType = null;
             selectedAssetType = null;
             selectedFile = null;
+            currentResultsData = null;
             document.querySelectorAll('.research-card').forEach(card => card.classList.remove('selected'));
             document.querySelectorAll('.webcopy-card').forEach(card => card.classList.remove('selected'));
             document.querySelectorAll('.asset-type-btn').forEach(btn => btn.classList.remove('selected'));
@@ -1015,6 +1244,21 @@
             document.getElementById('dynamicFields').classList.add('hidden');
             document.getElementById('emailField').classList.add('hidden');
             document.getElementById('submitWebCopyBtn').classList.add('hidden');
+        }
+
+        function startNewResearch() {
+            document.getElementById('page-results').classList.add('hidden');
+            document.getElementById('page1-research').classList.remove('hidden');
+            
+            // Reset form
+            document.getElementById('industry-research').value = '';
+            document.getElementById('region-research').value = '';
+            document.getElementById('product-research').value = '';
+            document.getElementById('email-research').value = '';
+            selectedResearch.clear();
+            currentResultsData = null;
+            document.querySelectorAll('.research-card').forEach(card => card.classList.remove('selected'));
+            updateResearchSelectionCount();
         }
 
         // Research Path Functions
@@ -1038,6 +1282,154 @@
             document.getElementById('submitResearchBtn').disabled = count === 0;
         }
 
+        // Show/hide loading overlay
+        function showLoading(title, message) {
+            document.getElementById('loading-title').textContent = title || 'Researching...';
+            document.getElementById('loading-message').textContent = message || 'This may take 30-60 seconds.';
+            document.getElementById('loading-overlay').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
+
+        // Render associations results
+        function renderAssociationsResults(data) {
+            const preview = document.getElementById('results-preview');
+            
+            // Check for error
+            if (data.error) {
+                preview.innerHTML = `
+                    <div class="error-message">
+                        <h2>No Results Found</h2>
+                        <p>${data.error_message || 'No associations were found for your search criteria.'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const associations = data.all_associations || [];
+            const industry = data.industry || 'Unknown Industry';
+            const region = data.region || '';
+            const retrievedDate = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            document.getElementById('results-subtitle').textContent = `${associations.length} associations found for ${industry}`;
+
+            let html = `
+                <div class="report-header">
+                    <h1>Trade Associations Report</h1>
+                    <p class="report-meta">${industry} | ${region} | Generated ${retrievedDate}</p>
+                </div>
+            `;
+
+            if (associations.length === 0) {
+                html += `
+                    <div class="error-message">
+                        <h2>No Associations Found</h2>
+                        <p>Try a broader industry term or different region.</p>
+                    </div>
+                `;
+            } else {
+                associations.forEach(assoc => {
+                    const membership = assoc.membership || {};
+                    const sponsorship = assoc.sponsorship || {};
+
+                    html += `
+                        <div class="association-card">
+                            <h3>${assoc.association_name || 'Unknown Association'}</h3>
+                            <a href="${assoc.website || '#'}" target="_blank" class="website">${assoc.website || 'No website'}</a>
+                            <p class="description">${assoc.description || ''}</p>
+
+                            <div class="data-section">
+                                <h4>Membership Information</h4>
+                                <div class="data-grid">
+                                    <div class="data-row">
+                                        <span class="data-label">Member Count:</span>
+                                        <span class="data-value ${isNotFound(membership.member_count) ? 'not-found' : ''}">${membership.member_count || 'Not found'}</span>
+                                    </div>
+                                    <div class="data-row">
+                                        <span class="data-label">Member Types:</span>
+                                        <span class="data-value ${isNotFound(membership.member_types) ? 'not-found' : ''}">${membership.member_types || 'Not found'}</span>
+                                    </div>
+                                    <div class="data-row">
+                                        <span class="data-label">Pricing:</span>
+                                        <span class="data-value ${isNotFound(membership.pricing_details) ? 'not-found' : ''}">${membership.pricing_details || 'Not found'}</span>
+                                    </div>
+                                    <div class="data-row">
+                                        <span class="data-label">Key Benefits:</span>
+                                        <span class="data-value ${isNotFound(membership.key_benefits) ? 'not-found' : ''}">${membership.key_benefits || 'Not found'}</span>
+                                    </div>
+                                    ${membership.pricing_source_url && !isNotFound(membership.pricing_source_url) ? `
+                                    <div class="data-row">
+                                        <span class="data-label">Source:</span>
+                                        <span class="data-value"><a href="${membership.pricing_source_url}" target="_blank">View source</a></span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+
+                            <div class="data-section">
+                                <h4>Sponsorship Opportunities</h4>
+                                <div class="data-grid">
+                                    <div class="data-row">
+                                        <span class="data-label">Available:</span>
+                                        <span class="data-value ${isNotFound(sponsorship.opportunities_available) ? 'not-found' : ''}">${sponsorship.opportunities_available || 'Not found'}</span>
+                                    </div>
+                                    <div class="data-row">
+                                        <span class="data-label">Details:</span>
+                                        <span class="data-value ${isNotFound(sponsorship.sponsorship_details) ? 'not-found' : ''}">${sponsorship.sponsorship_details || 'Not found'}</span>
+                                    </div>
+                                    <div class="data-row">
+                                        <span class="data-label">Advertising:</span>
+                                        <span class="data-value ${isNotFound(sponsorship.advertising_options) ? 'not-found' : ''}">${sponsorship.advertising_options || 'Not found'}</span>
+                                    </div>
+                                    ${sponsorship.sponsorship_source_url && !isNotFound(sponsorship.sponsorship_source_url) ? `
+                                    <div class="data-row">
+                                        <span class="data-label">Source:</span>
+                                        <span class="data-value"><a href="${sponsorship.sponsorship_source_url}" target="_blank">View source</a></span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            html += `
+                <div class="report-footer">
+                    Generated by Verso | Data retrieved ${retrievedDate}
+                </div>
+            `;
+
+            preview.innerHTML = html;
+        }
+
+        function isNotFound(value) {
+            if (!value) return true;
+            const lower = value.toLowerCase();
+            return lower === 'not found' || lower === 'n/a' || lower === 'unknown';
+        }
+
+        // Download PDF
+        function downloadPDF() {
+            const element = document.getElementById('results-preview');
+            const industry = currentResultsData?.industry || 'Research';
+            const opt = {
+                margin: 10,
+                filename: `${industry.replace(/\s+/g, '_')}_Associations_Report.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        // Submit Research
         async function submitResearch() {
             const industry = document.getElementById('industry-research').value.trim();
             const region = document.getElementById('region-research').value;
@@ -1060,33 +1452,67 @@
                 email: email
             };
 
-            const promises = Array.from(selectedResearch).map(type => 
-                fetch(WEBHOOK_URLS[type], {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                })
-            );
+            // Separate preview-supported and email-only research types
+            const previewTypes = Array.from(selectedResearch).filter(t => PREVIEW_SUPPORTED.includes(t));
+            const emailTypes = Array.from(selectedResearch).filter(t => !PREVIEW_SUPPORTED.includes(t));
 
             try {
-                await Promise.all(promises);
-                alert(`✓ Success! Your research for ${selectedResearch.size} type(s) has been sent to ${email}. Check your inbox in 2-3 minutes.`);
-                
-                // Reset
-                document.getElementById('industry-research').value = '';
-                document.getElementById('region-research').value = '';
-                document.getElementById('product-research').value = '';
-                document.getElementById('email-research').value = '';
-                selectedResearch.clear();
-                document.querySelectorAll('.research-card').forEach(card => {
-                    card.classList.remove('selected');
+                // Fire off email-only requests (don't wait)
+                emailTypes.forEach(type => {
+                    fetch(WEBHOOK_URLS[type], {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    }).catch(err => console.error(`Error with ${type}:`, err));
                 });
-                goToChoice();
+
+                // If there are preview types, show loading and wait for response
+                if (previewTypes.length > 0) {
+                    showLoading(
+                        'Researching Associations...',
+                        'This may take 30-60 seconds. We\'re searching multiple sources and extracting membership details, pricing, and sponsorship opportunities.'
+                    );
+
+                    // For now, only associations supports preview
+                    const response = await fetch(WEBHOOK_URLS.associations, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    hideLoading();
+
+                    if (response.ok) {
+                        const results = await response.json();
+                        currentResultsData = results;
+                        
+                        // Show results page
+                        document.getElementById('page1-research').classList.add('hidden');
+                        document.getElementById('page-results').classList.remove('hidden');
+                        renderAssociationsResults(results);
+
+                        // Notify about email types if any
+                        if (emailTypes.length > 0) {
+                            setTimeout(() => {
+                                alert(`Your other research (${emailTypes.join(', ')}) will be sent to ${email} shortly.`);
+                            }, 500);
+                        }
+                    } else {
+                        throw new Error('Request failed');
+                    }
+                } else {
+                    // Only email types selected
+                    alert(`✓ Success! Your research for ${selectedResearch.size} type(s) has been sent to ${email}. Check your inbox in 2-3 minutes.`);
+                    goToChoice();
+                }
             } catch (error) {
+                hideLoading();
+                console.error('Research error:', error);
                 alert('✗ Something went wrong. Please try again.');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Start Research <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                submitBtn.innerHTML = 'Start Research <span class="selection-count" id="researchSelectionCount">' + selectedResearch.size + '</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                updateResearchSelectionCount();
             }
         }
 
@@ -1098,7 +1524,6 @@
             selectedPageType = type;
 
             if (type === 'industry') {
-                // For industry page, just show email and submit
                 document.getElementById('assetTypeSelector').classList.add('hidden');
                 document.getElementById('dynamicFields').classList.add('hidden');
                 document.getElementById('emailField').classList.remove('hidden');
@@ -1106,7 +1531,6 @@
                 selectedAssetType = null;
                 selectedFile = null;
             } else {
-                // For asset page, show asset type selector
                 document.getElementById('assetTypeSelector').classList.remove('hidden');
                 document.getElementById('dynamicFields').classList.add('hidden');
                 document.getElementById('emailField').classList.add('hidden');
@@ -1115,15 +1539,14 @@
         }
 
         function selectAssetType(type) {
-            if (type === 'case-study') return; // Disabled
+            if (type === 'case-study') return;
             
             const buttons = document.querySelectorAll('.asset-type-btn');
             buttons.forEach(btn => btn.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
             selectedAssetType = type;
-            selectedFile = null; // Reset file when changing asset type
+            selectedFile = null;
 
-            // Show dynamic fields based on asset type
             showDynamicFields(type);
         }
 
@@ -1147,7 +1570,6 @@
             document.getElementById('emailField').classList.remove('hidden');
             document.getElementById('submitWebCopyBtn').classList.remove('hidden');
 
-            // Show read-only industry/region/product at top
             let fieldsHTML = `
                 <div class="info-banner">
                     <span class="info-banner-icon">ℹ️</span>
@@ -1287,7 +1709,6 @@
                     </div>
                 `;
             } else {
-                // Placeholder for future asset types
                 fieldsHTML += `
                     <div class="info-banner">
                         <span class="info-banner-icon">🚧</span>
@@ -1330,7 +1751,6 @@
             } else if (selectedPageType === 'asset' && selectedAssetType === 'webinar') {
                 webhookUrl = WEBHOOK_URLS.webinar;
                 
-                // Collect webinar-specific fields
                 data.persona_role = document.getElementById('persona-role')?.value.trim() || '';
                 data.persona_description = document.getElementById('persona-description')?.value.trim() || '';
                 data.persona_pains = document.getElementById('persona-pains')?.value.trim() || '';
@@ -1340,16 +1760,11 @@
                 data.webinar_topics = document.getElementById('webinar-topics')?.value.trim() || '';
                 data.date = document.getElementById('webinar-date')?.value || '';
                 data.times = document.getElementById('webinar-times')?.value.trim() || '';
-                
-                // Send speakers as simple string (comma-separated or line-separated)
                 data.speakers = document.getElementById('speakers')?.value.trim() || '';
-
-                // Add form_id
                 data.form_id = document.getElementById('form-id')?.value.trim() || '';
             } else if (selectedPageType === 'asset' && selectedAssetType === 'report') {
                 webhookUrl = WEBHOOK_URLS.report;
                 
-                // Validate file is selected
                 if (!selectedFile) {
                     alert('Please upload an eBook/report PDF file.');
                     submitBtn.disabled = false;
@@ -1357,7 +1772,6 @@
                     return;
                 }
                 
-                // Convert file to Base64
                 try {
                     submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing file...';
                     data.file_data = await fileToBase64(selectedFile);
@@ -1374,7 +1788,6 @@
                 
                 data.gate_id = document.getElementById('gate-id')?.value.trim() || '';
                 
-                // Validation for gate_id
                 if (!data.gate_id) {
                     alert('Please enter the Gate ID.');
                     submitBtn.disabled = false;
@@ -1382,7 +1795,6 @@
                     return;
                 }
                 
-                // Optional stat overrides (only include if filled)
                 const stat1Value = document.getElementById('stat-1-value')?.value.trim() || '';
                 const stat1Label = document.getElementById('stat-1-label')?.value.trim() || '';
                 const stat2Value = document.getElementById('stat-2-value')?.value.trim() || '';
