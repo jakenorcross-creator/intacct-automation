@@ -1294,120 +1294,136 @@
         }
 
         // Render associations results
-        function renderAssociationsResults(data) {
-            const preview = document.getElementById('results-preview');
-            
-            // Check for error
-            if (data.error) {
-                preview.innerHTML = `
-                    <div class="error-message">
-                        <h2>No Results Found</h2>
-                        <p>${data.error_message || 'No associations were found for your search criteria.'}</p>
-                    </div>
-                `;
-                return;
+function renderAssociationsResults(data) {
+    const preview = document.getElementById('results-preview');
+    
+    // Handle if data is an array (webhook returns array)
+    const resultData = Array.isArray(data) ? data[0] : data;
+    
+    // Check for error
+    if (resultData.error) {
+        preview.innerHTML = `
+            <div class="error-message">
+                <h2>No Results Found</h2>
+                <p>${resultData.error_message || 'No associations were found for your search criteria.'}</p>
+            </div>
+        `;
+        return;
+    }
+
+    const rawAssociations = resultData.all_associations || [];
+    const industry = resultData.industry || 'Unknown Industry';
+    const region = resultData.region || '';
+    const retrievedDate = new Date().toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+
+    // Extract actual association data from nested structure
+    const associations = rawAssociations.map(item => {
+        // Handle the nested OpenAI response structure
+        if (item.output && item.output[0] && item.output[0].content) {
+            const content = item.output[0].content[0];
+            if (content && content.text) {
+                return content.text;
             }
+        }
+        // If it's already flat, return as-is
+        return item;
+    }).filter(a => a && a.association_name);
 
-            const associations = data.all_associations || [];
-            const industry = data.industry || 'Unknown Industry';
-            const region = data.region || '';
-            const retrievedDate = new Date().toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
+    document.getElementById('results-subtitle').textContent = `${associations.length} associations found for ${industry}`;
 
-            document.getElementById('results-subtitle').textContent = `${associations.length} associations found for ${industry}`;
+    let html = `
+        <div class="report-header">
+            <h1>Trade Associations Report</h1>
+            <p class="report-meta">${industry} | ${region} | Generated ${retrievedDate}</p>
+        </div>
+    `;
 
-            let html = `
-                <div class="report-header">
-                    <h1>Trade Associations Report</h1>
-                    <p class="report-meta">${industry} | ${region} | Generated ${retrievedDate}</p>
-                </div>
-            `;
-
-            if (associations.length === 0) {
-                html += `
-                    <div class="error-message">
-                        <h2>No Associations Found</h2>
-                        <p>Try a broader industry term or different region.</p>
-                    </div>
-                `;
-            } else {
-                associations.forEach(assoc => {
-                    const membership = assoc.membership || {};
-                    const sponsorship = assoc.sponsorship || {};
-
-                    html += `
-                        <div class="association-card">
-                            <h3>${assoc.association_name || 'Unknown Association'}</h3>
-                            <a href="${assoc.website || '#'}" target="_blank" class="website">${assoc.website || 'No website'}</a>
-                            <p class="description">${assoc.description || ''}</p>
-
-                            <div class="data-section">
-                                <h4>Membership Information</h4>
-                                <div class="data-grid">
-                                    <div class="data-row">
-                                        <span class="data-label">Member Count:</span>
-                                        <span class="data-value ${isNotFound(membership.member_count) ? 'not-found' : ''}">${membership.member_count || 'Not found'}</span>
-                                    </div>
-                                    <div class="data-row">
-                                        <span class="data-label">Member Types:</span>
-                                        <span class="data-value ${isNotFound(membership.member_types) ? 'not-found' : ''}">${membership.member_types || 'Not found'}</span>
-                                    </div>
-                                    <div class="data-row">
-                                        <span class="data-label">Pricing:</span>
-                                        <span class="data-value ${isNotFound(membership.pricing_details) ? 'not-found' : ''}">${membership.pricing_details || 'Not found'}</span>
-                                    </div>
-                                    <div class="data-row">
-                                        <span class="data-label">Key Benefits:</span>
-                                        <span class="data-value ${isNotFound(membership.key_benefits) ? 'not-found' : ''}">${membership.key_benefits || 'Not found'}</span>
-                                    </div>
-                                    ${membership.pricing_source_url && !isNotFound(membership.pricing_source_url) ? `
-                                    <div class="data-row">
-                                        <span class="data-label">Source:</span>
-                                        <span class="data-value"><a href="${membership.pricing_source_url}" target="_blank">View source</a></span>
-                                    </div>
-                                    ` : ''}
-                                </div>
-                            </div>
-
-                            <div class="data-section">
-                                <h4>Sponsorship Opportunities</h4>
-                                <div class="data-grid">
-                                    <div class="data-row">
-                                        <span class="data-label">Available:</span>
-                                        <span class="data-value ${isNotFound(sponsorship.opportunities_available) ? 'not-found' : ''}">${sponsorship.opportunities_available || 'Not found'}</span>
-                                    </div>
-                                    <div class="data-row">
-                                        <span class="data-label">Details:</span>
-                                        <span class="data-value ${isNotFound(sponsorship.sponsorship_details) ? 'not-found' : ''}">${sponsorship.sponsorship_details || 'Not found'}</span>
-                                    </div>
-                                    <div class="data-row">
-                                        <span class="data-label">Advertising:</span>
-                                        <span class="data-value ${isNotFound(sponsorship.advertising_options) ? 'not-found' : ''}">${sponsorship.advertising_options || 'Not found'}</span>
-                                    </div>
-                                    ${sponsorship.sponsorship_source_url && !isNotFound(sponsorship.sponsorship_source_url) ? `
-                                    <div class="data-row">
-                                        <span class="data-label">Source:</span>
-                                        <span class="data-value"><a href="${sponsorship.sponsorship_source_url}" target="_blank">View source</a></span>
-                                    </div>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
+    if (associations.length === 0) {
+        html += `
+            <div class="error-message">
+                <h2>No Associations Found</h2>
+                <p>Try a broader industry term or different region.</p>
+            </div>
+        `;
+    } else {
+        associations.forEach(assoc => {
+            const membership = assoc.membership || {};
+            const sponsorship = assoc.sponsorship || {};
 
             html += `
-                <div class="report-footer">
-                    Generated by Verso | Data retrieved ${retrievedDate}
+                <div class="association-card">
+                    <h3>${assoc.association_name || 'Unknown Association'}</h3>
+                    <a href="${assoc.website || '#'}" target="_blank" class="website">${assoc.website || 'No website'}</a>
+                    <p class="description">${assoc.description || ''}</p>
+
+                    <div class="data-section">
+                        <h4>Membership Information</h4>
+                        <div class="data-grid">
+                            <div class="data-row">
+                                <span class="data-label">Member Count:</span>
+                                <span class="data-value ${isNotFound(membership.member_count) ? 'not-found' : ''}">${membership.member_count || 'Not found'}</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Member Types:</span>
+                                <span class="data-value ${isNotFound(membership.member_types) ? 'not-found' : ''}">${membership.member_types || 'Not found'}</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Pricing:</span>
+                                <span class="data-value ${isNotFound(membership.pricing_details) ? 'not-found' : ''}">${membership.pricing_details || 'Not found'}</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Key Benefits:</span>
+                                <span class="data-value ${isNotFound(membership.key_benefits) ? 'not-found' : ''}">${membership.key_benefits || 'Not found'}</span>
+                            </div>
+                            ${membership.pricing_source_url && !isNotFound(membership.pricing_source_url) ? `
+                            <div class="data-row">
+                                <span class="data-label">Source:</span>
+                                <span class="data-value"><a href="${membership.pricing_source_url}" target="_blank">View source</a></span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="data-section">
+                        <h4>Sponsorship Opportunities</h4>
+                        <div class="data-grid">
+                            <div class="data-row">
+                                <span class="data-label">Available:</span>
+                                <span class="data-value ${isNotFound(sponsorship.opportunities_available) ? 'not-found' : ''}">${sponsorship.opportunities_available || 'Not found'}</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Details:</span>
+                                <span class="data-value ${isNotFound(sponsorship.sponsorship_details) ? 'not-found' : ''}">${sponsorship.sponsorship_details || 'Not found'}</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">Advertising:</span>
+                                <span class="data-value ${isNotFound(sponsorship.advertising_options) ? 'not-found' : ''}">${sponsorship.advertising_options || 'Not found'}</span>
+                            </div>
+                            ${sponsorship.sponsorship_source_url && !isNotFound(sponsorship.sponsorship_source_url) ? `
+                            <div class="data-row">
+                                <span class="data-label">Source:</span>
+                                <span class="data-value"><a href="${sponsorship.sponsorship_source_url}" target="_blank">View source</a></span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
                 </div>
             `;
+        });
+    }
 
-            preview.innerHTML = html;
-        }
+    html += `
+        <div class="report-footer">
+            Generated by Verso | Data retrieved ${retrievedDate}
+        </div>
+    `;
+
+    preview.innerHTML = html;
+}
 
         function isNotFound(value) {
             if (!value) return true;
