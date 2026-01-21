@@ -936,13 +936,13 @@
 
                 <div class="choice-grid">
                     <div class="choice-card" onclick="selectPath('research')">
-                        <div class="choice-icon">ðŸ”</div>
+                        <div class="choice-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00dc06" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
                         <h3>Research an Industry</h3>
                         <p>Discover publications, conferences, associations, targeting strategies, and keyword opportunities for your industry</p>
                     </div>
 
                     <div class="choice-card" onclick="selectPath('webcopy')">
-                        <div class="choice-icon">âœï¸</div>
+                        <div class="choice-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00dc06" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div>
                         <h3>Create Web Page Copy</h3>
                         <p>Generate tailored landing page content for industry pages or specific marketing assets like webinars and ebooks</p>
                     </div>
@@ -998,27 +998,27 @@
                     <label>What would you like to research?</label>
                     <div class="research-cards-grid">
                         <div class="research-card" onclick="toggleResearchSelection('publications')">
-                            <div class="icon">ðŸ“°</div>
+                            <div class="icon">PUB</div>
                             <h4>Publications</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('conferences')">
-                            <div class="icon">ðŸŽ¤</div>
+                            <div class="icon">CON</div>
                             <h4>Conferences</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('associations')">
-                            <div class="icon">ðŸ¤</div>
+                            <div class="icon">ASC</div>
                             <h4>Associations</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('linkedin')">
-                            <div class="icon">ðŸ’¼</div>
+                            <div class="icon">LI</div>
                             <h4>LI Targeting</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('meta')">
-                            <div class="icon">ðŸ“±</div>
+                            <div class="icon">META</div>
                             <h4>Meta Targeting</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('keywords')">
-                            <div class="icon">ðŸ”‘</div>
+                            <div class="icon">KEY</div>
                             <h4>Keyword Ideas</h4>
                         </div>
                     </div>
@@ -1107,10 +1107,10 @@
                     <div id="assetTypeSelector" class="asset-type-selector hidden">
                         <label>Asset Type</label>
                         <div class="asset-type-grid">
-                            <button class="asset-type-btn" onclick="selectAssetType('webinar')">ðŸ“¹ Webinar</button>
-                            <button class="asset-type-btn" onclick="selectAssetType('report')">ðŸ“Š Report / eBook</button>
+                            <button class="asset-type-btn" onclick="selectAssetType('webinar')">Webinar</button>
+                            <button class="asset-type-btn" onclick="selectAssetType('report')">Report / eBook</button>
                             <button class="asset-type-btn disabled" onclick="return false;">
-                                ðŸ“‹ Case Study
+                                Case Study
                                 <span class="coming-soon">Coming Soon</span>
                             </button>
                         </div>
@@ -1613,13 +1613,13 @@ function renderAssociationsResults(data) {
                     }
                 } else {
                     // Only email types selected
-                    alert(`âœ“ Success! Your research for ${selectedResearch.size} type(s) has been sent to ${email}. Check your inbox in 2-3 minutes.`);
+                    alert(`Success! Your research for ${selectedResearch.size} type(s) has been sent to ${email}. Check your inbox in 2-3 minutes.`);
                     goToChoice();
                 }
             } catch (error) {
                 hideLoading();
                 console.error('Research error:', error);
-                alert('âœ— Something went wrong. Please try again.');
+                alert('Something went wrong. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Start Research <span class="selection-count" id="researchSelectionCount">' + selectedResearch.size + '</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
@@ -1677,7 +1677,7 @@ function renderAssociationsResults(data) {
                                     >
                                 </label>
                                 <div id="industry-file-selected-info" class="file-selected-info" style="display: none;">
-                                    <span class="file-icon">📄</span>
+                                    <span class="file-icon">PDF</span>
                                     <div class="file-details">
                                         <div id="industry-file-name" class="file-name"></div>
                                         <div id="industry-file-size" class="file-size"></div>
@@ -1732,7 +1732,7 @@ function renderAssociationsResults(data) {
 
             let fieldsHTML = `
                 <div class="info-banner">
-                    <span class="info-banner-icon">â„¹ï¸</span>
+                    <span class="info-banner-icon">!</span>
                     <div class="info-banner-text">
                         <strong>Targeting:</strong> ${industry} | ${region} | ${product}
                     </div>
@@ -1818,12 +1818,12 @@ function renderAssociationsResults(data) {
                                 required
                             >
                             <div id="file-selected-info" class="file-selected-info">
-                                <span class="file-icon">ðŸ“„</span>
+                                <span class="file-icon">PDF</span>
                                 <div class="file-details">
                                     <div id="file-name" class="file-name"></div>
                                     <div id="file-size" class="file-size"></div>
                                 </div>
-                                <button type="button" class="file-remove" onclick="removeFile()" title="Remove file">âœ•</button>
+                                <button type="button" class="file-remove" onclick="removeFile()" title="Remove file">x</button>
                             </div>
                         </div>
                         <p class="field-hint">Upload a PDF file (max 10MB). The document will be analyzed to extract themes, audience, and key statistics for the landing page.</p>
@@ -1871,7 +1871,7 @@ function renderAssociationsResults(data) {
             } else {
                 fieldsHTML += `
                     <div class="info-banner">
-                        <span class="info-banner-icon">ðŸš§</span>
+                        <span class="info-banner-icon">!</span>
                         <div class="info-banner-text">
                             <strong>${assetType}</strong> asset type fields are coming soon. For now, please use the Webinar or Report/eBook option.
                         </div>
@@ -1989,13 +1989,13 @@ function renderAssociationsResults(data) {
                 });
 
                 if (response.ok) {
-                    alert(`âœ“ Success! Your web page copy is being generated and will be sent to ${email} shortly.`);
+                    alert(`Success! Your web page copy is being generated and will be sent to ${email} shortly.`);
                     goToChoice();
                 } else {
                     throw new Error('Request failed');
                 }
             } catch (error) {
-                alert('âœ— Something went wrong. Please try again.');
+                alert('Something went wrong. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
