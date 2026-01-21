@@ -1908,6 +1908,23 @@ function renderAssociationsResults(data) {
 
             if (selectedPageType === 'industry') {
                 webhookUrl = WEBHOOK_URLS.industryPage;
+                
+                // Handle optional industry research file upload
+                if (selectedIndustryFile) {
+                    try {
+                        submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing file...';
+                        data.file_data = await fileToBase64(selectedIndustryFile);
+                        data.file_name = selectedIndustryFile.name;
+                        data.file_type = selectedIndustryFile.type;
+                        submitBtn.innerHTML = '<div class="loading-spinner"></div> Generating...';
+                    } catch (err) {
+                        console.error('File read error:', err);
+                        alert('Error reading file. Please try again.');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
+                        return;
+                    }
+                }
             } else if (selectedPageType === 'asset' && selectedAssetType === 'webinar') {
                 webhookUrl = WEBHOOK_URLS.webinar;
                 
