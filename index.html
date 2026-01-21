@@ -598,6 +598,51 @@
             position: relative;
         }
 
+        .file-upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 24px;
+            border: 2px dashed #e5e7eb;
+            border-radius: 16px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .file-upload-area:hover {
+            border-color: #00dc06;
+            background: #f0fdf4;
+        }
+
+        .file-upload-area svg {
+            margin-bottom: 12px;
+        }
+
+        .file-upload-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .file-upload-hint {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .file-upload-area .file-upload-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
         .file-upload-input {
             width: 100%;
             padding: 24px 20px;
@@ -891,13 +936,13 @@
 
                 <div class="choice-grid">
                     <div class="choice-card" onclick="selectPath('research')">
-                        <div class="choice-icon">🔍</div>
+                        <div class="choice-icon">ðŸ”</div>
                         <h3>Research an Industry</h3>
                         <p>Discover publications, conferences, associations, targeting strategies, and keyword opportunities for your industry</p>
                     </div>
 
                     <div class="choice-card" onclick="selectPath('webcopy')">
-                        <div class="choice-icon">✍️</div>
+                        <div class="choice-icon">âœï¸</div>
                         <h3>Create Web Page Copy</h3>
                         <p>Generate tailored landing page content for industry pages or specific marketing assets like webinars and ebooks</p>
                     </div>
@@ -953,27 +998,27 @@
                     <label>What would you like to research?</label>
                     <div class="research-cards-grid">
                         <div class="research-card" onclick="toggleResearchSelection('publications')">
-                            <div class="icon">📰</div>
+                            <div class="icon">ðŸ“°</div>
                             <h4>Publications</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('conferences')">
-                            <div class="icon">🎤</div>
+                            <div class="icon">ðŸŽ¤</div>
                             <h4>Conferences</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('associations')">
-                            <div class="icon">🤝</div>
+                            <div class="icon">ðŸ¤</div>
                             <h4>Associations</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('linkedin')">
-                            <div class="icon">💼</div>
+                            <div class="icon">ðŸ’¼</div>
                             <h4>LI Targeting</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('meta')">
-                            <div class="icon">📱</div>
+                            <div class="icon">ðŸ“±</div>
                             <h4>Meta Targeting</h4>
                         </div>
                         <div class="research-card" onclick="toggleResearchSelection('keywords')">
-                            <div class="icon">🔑</div>
+                            <div class="icon">ðŸ”‘</div>
                             <h4>Keyword Ideas</h4>
                         </div>
                     </div>
@@ -1062,10 +1107,10 @@
                     <div id="assetTypeSelector" class="asset-type-selector hidden">
                         <label>Asset Type</label>
                         <div class="asset-type-grid">
-                            <button class="asset-type-btn" onclick="selectAssetType('webinar')">📹 Webinar</button>
-                            <button class="asset-type-btn" onclick="selectAssetType('report')">📊 Report / eBook</button>
+                            <button class="asset-type-btn" onclick="selectAssetType('webinar')">ðŸ“¹ Webinar</button>
+                            <button class="asset-type-btn" onclick="selectAssetType('report')">ðŸ“Š Report / eBook</button>
                             <button class="asset-type-btn disabled" onclick="return false;">
-                                📋 Case Study
+                                ðŸ“‹ Case Study
                                 <span class="coming-soon">Coming Soon</span>
                             </button>
                         </div>
@@ -1152,6 +1197,7 @@
         let selectedPageType = null;
         let selectedAssetType = null;
         let selectedFile = null;
+        let selectedIndustryFile = null;
         let currentResultsData = null;
 
         // Convert file to Base64
@@ -1216,6 +1262,54 @@
             document.getElementById('file-selected-info').classList.remove('visible');
         }
 
+        // Handle industry research file selection
+        function handleIndustryFileSelect(event) {
+            const file = event.target.files[0];
+            const fileInfo = document.getElementById('industry-file-selected-info');
+            const uploadArea = document.getElementById('industry-file-upload-area');
+            
+            if (file) {
+                if (file.type !== 'application/pdf') {
+                    alert('Please upload a PDF file.');
+                    event.target.value = '';
+                    selectedIndustryFile = null;
+                    fileInfo.style.display = 'none';
+                    uploadArea.style.display = 'flex';
+                    return;
+                }
+                
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size must be under 10MB.');
+                    event.target.value = '';
+                    selectedIndustryFile = null;
+                    fileInfo.style.display = 'none';
+                    uploadArea.style.display = 'flex';
+                    return;
+                }
+                
+                selectedIndustryFile = file;
+                document.getElementById('industry-file-name').textContent = file.name;
+                document.getElementById('industry-file-size').textContent = formatFileSize(file.size);
+                fileInfo.style.display = 'flex';
+                uploadArea.style.display = 'none';
+            } else {
+                selectedIndustryFile = null;
+                fileInfo.style.display = 'none';
+                uploadArea.style.display = 'flex';
+            }
+        }
+
+        // Remove selected industry file
+        function removeIndustryFile() {
+            const fileInput = document.getElementById('industry-research-file');
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            selectedIndustryFile = null;
+            document.getElementById('industry-file-selected-info').style.display = 'none';
+            document.getElementById('industry-file-upload-area').style.display = 'flex';
+        }
+
         // Path Selection
         function selectPath(path) {
             document.getElementById('page0').classList.add('hidden');
@@ -1236,6 +1330,7 @@
             selectedPageType = null;
             selectedAssetType = null;
             selectedFile = null;
+            selectedIndustryFile = null;
             currentResultsData = null;
             document.querySelectorAll('.research-card').forEach(card => card.classList.remove('selected'));
             document.querySelectorAll('.webcopy-card').forEach(card => card.classList.remove('selected'));
@@ -1518,13 +1613,13 @@ function renderAssociationsResults(data) {
                     }
                 } else {
                     // Only email types selected
-                    alert(`✓ Success! Your research for ${selectedResearch.size} type(s) has been sent to ${email}. Check your inbox in 2-3 minutes.`);
+                    alert(`âœ“ Success! Your research for ${selectedResearch.size} type(s) has been sent to ${email}. Check your inbox in 2-3 minutes.`);
                     goToChoice();
                 }
             } catch (error) {
                 hideLoading();
                 console.error('Research error:', error);
-                alert('✗ Something went wrong. Please try again.');
+                alert('âœ— Something went wrong. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Start Research <span class="selection-count" id="researchSelectionCount">' + selectedResearch.size + '</span> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
@@ -1541,11 +1636,60 @@ function renderAssociationsResults(data) {
 
             if (type === 'industry') {
                 document.getElementById('assetTypeSelector').classList.add('hidden');
-                document.getElementById('dynamicFields').classList.add('hidden');
                 document.getElementById('emailField').classList.remove('hidden');
                 document.getElementById('submitWebCopyBtn').classList.remove('hidden');
                 selectedAssetType = null;
                 selectedFile = null;
+                selectedIndustryFile = null;
+                
+                // Show industry-specific dynamic fields with optional file upload
+                const dynamicFieldsContainer = document.getElementById('dynamicFields');
+                dynamicFieldsContainer.innerHTML = `
+                    <div class="collapsible-section">
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <h4>
+                                Upload Industry Research
+                                <span class="optional-badge">Optional</span>
+                            </h4>
+                            <svg class="collapsible-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                        <div class="collapsible-content">
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 16px;">Upload a PDF containing ICP research, competitive analysis, or industry documentation to enhance the generated copy.</p>
+                            
+                            <div class="file-upload-wrapper">
+                                <label class="file-upload-area" id="industry-file-upload-area">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                        <line x1="12" y1="18" x2="12" y2="12"/>
+                                        <line x1="9" y1="15" x2="15" y2="15"/>
+                                    </svg>
+                                    <span class="file-upload-text">Click to upload or drag and drop</span>
+                                    <span class="file-upload-hint">PDF only (max 10MB)</span>
+                                    <input 
+                                        type="file" 
+                                        id="industry-research-file" 
+                                        accept=".pdf,application/pdf"
+                                        class="file-upload-input"
+                                        onchange="handleIndustryFileSelect(event)"
+                                    >
+                                </label>
+                                <div id="industry-file-selected-info" class="file-selected-info" style="display: none;">
+                                    <span class="file-icon">📄</span>
+                                    <div class="file-details">
+                                        <div id="industry-file-name" class="file-name"></div>
+                                        <div id="industry-file-size" class="file-size"></div>
+                                    </div>
+                                    <button type="button" class="file-remove" onclick="removeIndustryFile()" title="Remove file">✕</button>
+                                </div>
+                            </div>
+                            <p class="field-hint">The document will be analyzed to extract ICP insights, pain points, and industry-specific context for the landing page.</p>
+                        </div>
+                    </div>
+                `;
+                dynamicFieldsContainer.classList.remove('hidden');
             } else {
                 document.getElementById('assetTypeSelector').classList.remove('hidden');
                 document.getElementById('dynamicFields').classList.add('hidden');
@@ -1588,7 +1732,7 @@ function renderAssociationsResults(data) {
 
             let fieldsHTML = `
                 <div class="info-banner">
-                    <span class="info-banner-icon">ℹ️</span>
+                    <span class="info-banner-icon">â„¹ï¸</span>
                     <div class="info-banner-text">
                         <strong>Targeting:</strong> ${industry} | ${region} | ${product}
                     </div>
@@ -1674,12 +1818,12 @@ function renderAssociationsResults(data) {
                                 required
                             >
                             <div id="file-selected-info" class="file-selected-info">
-                                <span class="file-icon">📄</span>
+                                <span class="file-icon">ðŸ“„</span>
                                 <div class="file-details">
                                     <div id="file-name" class="file-name"></div>
                                     <div id="file-size" class="file-size"></div>
                                 </div>
-                                <button type="button" class="file-remove" onclick="removeFile()" title="Remove file">✕</button>
+                                <button type="button" class="file-remove" onclick="removeFile()" title="Remove file">âœ•</button>
                             </div>
                         </div>
                         <p class="field-hint">Upload a PDF file (max 10MB). The document will be analyzed to extract themes, audience, and key statistics for the landing page.</p>
@@ -1727,7 +1871,7 @@ function renderAssociationsResults(data) {
             } else {
                 fieldsHTML += `
                     <div class="info-banner">
-                        <span class="info-banner-icon">🚧</span>
+                        <span class="info-banner-icon">ðŸš§</span>
                         <div class="info-banner-text">
                             <strong>${assetType}</strong> asset type fields are coming soon. For now, please use the Webinar or Report/eBook option.
                         </div>
@@ -1845,13 +1989,13 @@ function renderAssociationsResults(data) {
                 });
 
                 if (response.ok) {
-                    alert(`✓ Success! Your web page copy is being generated and will be sent to ${email} shortly.`);
+                    alert(`âœ“ Success! Your web page copy is being generated and will be sent to ${email} shortly.`);
                     goToChoice();
                 } else {
                     throw new Error('Request failed');
                 }
             } catch (error) {
-                alert('✗ Something went wrong. Please try again.');
+                alert('âœ— Something went wrong. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Generate Web Copy <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>';
