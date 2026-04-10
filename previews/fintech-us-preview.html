@@ -3,449 +3,750 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FinTech — Verso Preview</title>
+  <title>FinTech — Sage Intacct Preview</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: #1a1a1a;
+      background: #111111;
       color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 15px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
       line-height: 1.6;
-      padding: 40px 24px;
     }
-    .container { max-width: 860px; margin: 0 auto; }
-    h1 { font-size: 26px; font-weight: 600; margin-bottom: 6px; }
-    .meta { color: #888; font-size: 13px; margin-bottom: 40px; }
-    .section {
-      border-top: 1px solid #2e2e2e;
-      margin-bottom: 32px;
-      padding-top: 20px;
-    }
-    .section-label {
-      font-size: 11px;
+
+    /* ── PREVIEW BANNER ── */
+    .preview-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: #00d959;
+      color: #000;
+      text-align: center;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #555;
-      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+      padding: 8px 16px;
     }
-    .field { margin-bottom: 20px; }
-    .field-name {
+
+    /* ── HEADER ── */
+    .site-header {
+      background: #1d1d1d;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 36px;
+      z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 32px; }
+    .sage-logo { font-size: 22px; font-weight: 800; color: #00d959; letter-spacing: -0.02em; }
+    .header-nav { display: flex; gap: 24px; list-style: none; }
+    .header-nav a { color: #ccc; font-size: 14px; text-decoration: none; }
+    .header-nav a:hover { color: #fff; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-phone { color: #aaa; font-size: 13px; }
+    .btn-primary {
+      background: #00d959;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline {
+      background: transparent;
+      color: #00d959;
+      border: 1px solid #00d959;
+      border-radius: 4px;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline:hover { background: rgba(0,217,89,0.1); }
+
+    /* ── SHARED LAYOUT ── */
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .green-tag {
+      display: inline-block;
+      border: 1px solid #00d959;
       color: #00d959;
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      border-radius: 20px;
+      padding: 4px 12px;
+      margin-bottom: 16px;
     }
-    .field-value {
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0d1a12 0%, #111 60%, #0d0d1a 100%);
+      padding: 80px 24px 64px;
+      margin-top: 36px;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+    .hero-left { flex: 1 1 60%; }
+    .hero-right { flex: 0 0 360px; }
+    .hero-h1 {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 800;
       color: #fff;
-      white-space: pre-wrap;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero-body { color: #a0a0a0; font-size: 17px; line-height: 1.7; margin-bottom: 16px; }
+    .hero-subtitle { color: #888; font-size: 14px; }
+    .hero-form-card {
+      background: #fff;
+      color: #111;
+      border-radius: 8px;
+      padding: 28px;
+    }
+    .hero-form-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #111; }
+    .form-steps { display: flex; gap: 8px; margin-bottom: 20px; }
+    .form-step {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .form-step.active { background: #00d959; color: #000; }
+    .form-step.inactive { background: #e5e5e5; color: #888; }
+    .form-field { margin-bottom: 14px; }
+    .form-field label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 4px; }
+    .form-field input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      background: #fff;
+      color: #111;
+    }
+    .form-submit { margin-top: 18px; width: 100%; background: #00d959; color: #000; border: none; border-radius: 4px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
+
+    /* ── AI COPILOT ── */
+    .ai-copilot { background: #111; padding: 80px 24px; }
+    .gradient-border-wrap {
+      background: linear-gradient(135deg, #7b2ff7, #00d959);
+      border-radius: 12px;
+      padding: 2px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .gradient-border-inner {
+      background: #111;
+      border-radius: 10px;
+      padding: 48px;
+    }
+    .ai-copilot h2 { font-size: clamp(26px, 3vw, 40px); font-weight: 800; color: #fff; margin-bottom: 12px; }
+    .ai-copilot h3 { font-size: 18px; font-weight: 600; color: #ccc; margin-bottom: 16px; }
+    .ai-copilot p { color: #a0a0a0; font-size: 16px; line-height: 1.7; margin-bottom: 28px; }
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── PRODUCT FEATURES ── */
+    .product-features { background: #0e0e0e; padding: 80px 24px; }
+    .features-label { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #00d959; margin-bottom: 10px; }
+    .features-heading { font-size: clamp(24px, 3vw, 38px); font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .features-link { color: #00d959; font-size: 14px; text-decoration: none; display: inline-block; margin-bottom: 36px; }
+    .features-link:hover { text-decoration: underline; }
+    .features-columns { display: flex; gap: 32px; align-items: flex-start; }
+    .panel-tabs { flex: 0 0 340px; display: flex; flex-direction: column; gap: 0; }
+    .panel-tab {
+      padding: 18px 20px;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      border-bottom: 1px solid #222;
+      transition: border-color 0.2s;
+    }
+    .panel-tab:hover { border-left-color: #00d95966; }
+    .panel-tab.active { border-left-color: #00d959; background: #161616; }
+    .panel-tab-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .panel-tab-body { font-size: 13px; color: #888; display: none; }
+    .panel-tab.active .panel-tab-body { display: block; }
+    .panel-right { flex: 1; }
+    .panel-detail { display: none; }
+    .panel-detail.active { display: block; }
+    .panel-detail-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+    .panel-detail-body { color: #a0a0a0; font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+    .screenshot-placeholder {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+    .features-btns { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── BENEFITS ── */
+    .benefits { background: #111; padding: 80px 24px; }
+    .benefits-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .benefits-sub { color: #a0a0a0; font-size: 16px; margin-bottom: 40px; }
+    .benefit-cards { display: flex; gap: 24px; flex-wrap: wrap; }
+    .benefit-card {
+      flex: 1 1 280px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 28px;
+    }
+    .benefit-icon-wrap { margin-bottom: 16px; }
+    .benefit-icon {
+      width: 40px; height: 40px;
+      background: #00d959;
+      border-radius: 50%;
+      opacity: 0.85;
+    }
+    .benefit-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .benefit-body { color: #a0a0a0; font-size: 14px; line-height: 1.65; }
+
+    /* ── CTA ── */
+    .cta-section { background: #0e0e0e; padding: 80px 24px; }
+    .cta-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #00d959; margin-bottom: 12px; }
+    .cta-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; margin-bottom: 40px; }
+    .cta-cards { display: flex; gap: 24px; flex-wrap: wrap; }
+    .cta-card {
+      flex: 1 1 280px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 32px;
+      transition: border-color 0.2s;
+    }
+    .cta-card:hover { border-color: #00d959; }
+    .cta-icon { font-size: 28px; margin-bottom: 16px; }
+    .cta-card-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .cta-card-body { color: #a0a0a0; font-size: 14px; line-height: 1.65; margin-bottom: 20px; }
+    .cta-card .btn-primary { font-size: 13px; }
+
+    /* ── EXTENDED CAPABILITIES ── */
+    .extended { background: #111; padding: 80px 24px; }
+    .extended-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .extended-sub { color: #a0a0a0; font-size: 16px; margin-bottom: 40px; }
+    .ext-cards { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 36px; }
+    .ext-card {
+      flex: 1 1 280px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .ext-screenshot-placeholder {
+      background: #252525;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ext-card-title { font-size: 16px; font-weight: 700; color: #fff; padding: 20px 20px 6px; }
+    .ext-card-body { color: #a0a0a0; font-size: 13px; line-height: 1.6; padding: 0 20px 20px; }
+
+    /* ── FAQS ── */
+    .faqs { background: #0e0e0e; padding: 80px 24px; }
+    .faqs-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; text-align: center; margin-bottom: 40px; }
+    .faq-list { max-width: 780px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid #222;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      padding-left: 16px;
+      transition: border-color 0.2s;
+    }
+    .faq-item:hover { border-left-color: #00d95966; }
+    .faq-item.active { border-left-color: #00d959; }
+    .faq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 12px 18px 0;
+    }
+    .faq-title { font-size: 15px; font-weight: 600; color: #fff; }
+    .faq-icon { color: #00d959; font-size: 18px; font-weight: 700; }
+    .faq-answer { color: #a0a0a0; font-size: 14px; line-height: 1.7; padding-bottom: 18px; padding-right: 12px; }
+
+    /* ── QUOTES ── */
+    .quotes { background: #111; padding: 80px 24px; }
+    .quotes-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #00d959; margin-bottom: 12px; }
+    .quotes-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .quotes-sub { color: #a0a0a0; font-size: 16px; margin-bottom: 40px; }
+    .quote-cards { display: flex; gap: 24px; flex-wrap: wrap; }
+    .quote-card {
+      flex: 1 1 260px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 28px;
+    }
+    .quote-category { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #00d959; margin-bottom: 14px; }
+    .quote-text { font-size: 15px; color: #fff; line-height: 1.65; font-style: italic; margin-bottom: 16px; }
+    .quote-attr { font-size: 13px; color: #888; }
+    .quote-placeholder { flex: 1 1 260px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 28px; }
+    .quote-placeholder-bar { height: 10px; background: #252525; border-radius: 4px; margin-bottom: 10px; }
+    .quote-placeholder-bar.short { width: 60%; }
+
+    /* ── FOOTER ── */
+    .site-footer { background: #111; border-top: 1px solid #222; padding: 48px 24px 32px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; flex-wrap: wrap; gap: 24px; }
+    .footer-logo { font-size: 24px; font-weight: 800; color: #00d959; }
+    .footer-social { display: flex; gap: 16px; }
+    .footer-social a { color: #666; font-size: 13px; text-decoration: none; }
+    .footer-social a:hover { color: #aaa; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { color: #666; font-size: 13px; text-decoration: none; }
+    .footer-links a:hover { color: #aaa; }
+    .footer-bottom { border-top: 1px solid #222; padding-top: 20px; color: #555; font-size: 12px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-inner { flex-direction: column; }
+      .hero-right { width: 100%; }
+      .features-columns { flex-direction: column; }
+      .panel-tabs { width: 100%; }
+      .header-nav { display: none; }
+      .header-phone { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>FinTech — Verso Preview</h1>
-    <div class="meta">Generated Apr 10, 2026, 3:17 PM &nbsp;·&nbsp; Region: US</div>
-    
-    <div class="section">
-      <div class="section-label">Hero</div>
-      
-      <div class="field">
-        <div class="field-name">Hero Title 1</div>
-        <div class="field-value">FinTech accounting software built for scale</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Hero Body 1</div>
-        <div class="field-value">Streamline finance, automate compliance, and gain real-time insight. Sage Intacct helps fintech companies grow, adapt, and stay audit-ready as you scale.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Hero Subtitle 1</div>
-        <div class="field-value">Trusted by top fintech companies</div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="section-label">Meta</div>
-      
-      <div class="field">
-        <div class="field-name">Page Title</div>
-        <div class="field-value">FinTech Accounting Software | Sage US</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Meta Description</div>
-        <div class="field-value">Sage Intacct delivers fintech software for fast-growing companies. Automate compliance, multi-entity accounting, and reporting to drive growth and efficiency.</div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="section-label">Content Spots</div>
-      
-      <div class="field">
-        <div class="field-name">Content Spot 1</div>
-        <div class="field-value">Track SaaS and fintech business metrics across every dimension, client, product, entity, and region. Surface trends, analyze cash flow, and benchmark against other top fintech companies with real-time dashboards and customizable reports.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 2</div>
-        <div class="field-value">Automate consolidations across entities, currencies, and geographies. Fintech companies can close the books up to 80% faster, manage intercompany transactions, and ensure accurate, audit-ready financials for global operations.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 3</div>
-        <div class="field-value">Automate complex revenue recognition for recurring, usage, and hybrid billing models. Sage Intacct helps fintech companies stay compliant with ASC 606, reduce audit risk, and cut manual effort, no more error-prone spreadsheets.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 4</div>
-        <div class="field-value">Use AI-driven automation to capture, categorize, and process invoices. Reduce manual data entry by up to 90%, cut payment cycle times, and protect against fraud, so your fintech business manages payments at speed and scale.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 5</div>
-        <div class="field-value">Sage Intacct provides built-in audit trails, approval workflows, and role-based access. Meet GAAP and SOX requirements from day one, reduce compliance risk, and simplify audit prep for your fast-growing fintech company.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 6</div>
-        <div class="field-value">Sage Copilot helps finance and accounting teams work faster and smarter. From accelerating month-end close to flagging budget variances, Sage Copilot brings speed, clarity, and confidence to every task.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 7</div>
-        <div class="field-value">Sage Intacct provides multi-entity, multi-currency support with automated consolidations, dimensional reporting, and integrations to fintech solutions. This allows fintech companies to scale operations, onboard new entities quickly, and manage growth without increasing manual workloads or risking data errors.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 8</div>
-        <div class="field-value">Sage Intacct is the only cloud financial management platform endorsed by the AICPA and designed for fintech and SaaS business models. It automates core accounting, revenue recognition, and compliance, offers advanced dimensional reporting, and integrates with fintech payments and CRM systems, without complex customizations.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 9</div>
-        <div class="field-value">Yes. Sage Intacct automates revenue recognition for recurring, usage-based, and hybrid billing models. It supports ASC 606 and IFRS 15 compliance, reducing manual calculations and audit risk. Your team can handle complex fintech billing scenarios confidently and prepare for rapid growth or IPO.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 10</div>
-        <div class="field-value">Sage Intacct provides automated audit trails, approval workflows, and controls aligned with GAAP, SOX, and IFRS. Fintech companies can demonstrate compliance to investors and regulators with clear, real-time documentation, reducing audit prep time and risk of errors.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 11</div>
-        <div class="field-value">Yes. Sage Intacct is built for fintech companies operating across multiple entities and currencies. It automates consolidations, manages intercompany transactions, and handles currency conversions, helping your team close faster and report accurately at scale.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 12</div>
-        <div class="field-value">Sage Intacct offers open APIs and 1,800+ marketplace integrations, including Salesforce, Stripe, Chargebee, and fintech payment platforms. This enables seamless data flow, automated reconciliations, and unified reporting across your fintech technology ecosystem.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 13</div>
-        <div class="field-value">Sage AI and Sage Copilot automate core accounting tasks such as invoice processing, reconciliations, and reporting. For fintech companies, this means faster close cycles, fewer errors, and more time spent analyzing performance rather than handling manual processes.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 14</div>
-        <div class="field-value">Most fintech companies see implementation completed within a few months, depending on complexity and the number of integrations. The process is guided by Sage experts and partners experienced in the fintech industry, ensuring a smooth transition from legacy or manual systems.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 15</div>
-        <div class="field-value">Yes. Sage Intacct is designed to automate and enforce compliance with ASC 606, SOX, IFRS, and other regulatory requirements. Built-in controls, audit trails, and reporting templates make it easier for fintech companies to meet evolving standards and pass audits.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 16</div>
-        <div class="field-value">Sage Intacct provides customizable dashboards and over 200 investor-grade reports. Fintech companies can track KPIs such as CAC, churn, NRR, LTV, and deferred revenue in real time, supporting investor reporting and strategic decision-making.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 17</div>
-        <div class="field-value">Sage Intacct uses AI-driven AP automation to capture invoices, match payments, and track fintech payment flows. This reduces manual entry, speeds up processing, and improves accuracy, helping fintech companies manage high payment volumes efficiently and securely.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Content Spot 18</div>
-        <div class="field-value">Yes. Sage Intacct supports global operations by handling multi-currency, multi-entity, and international tax requirements. Automated consolidations, local compliance, and integrations with global payment providers make cross-border expansion efficient and audit-ready.</div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="section-label">Gate / Form</div>
-      
-      <div class="field">
-        <div class="field-name">Form 1</div>
-        <div class="field-value">#gate-23c2b06d-e4a9-400c-a9a2-6708036e0cf0</div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="section-label">Other</div>
-      
-      <div class="field">
-        <div class="field-name">Section Hero Title 1</div>
-        <div class="field-value">AI that accelerates fintech workflows</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Section Hero Title 2</div>
-        <div class="field-value">Purpose-built features for fintech companies</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Section Hero Title 3</div>
-        <div class="field-value">What fintech companies achieve with Sage Intacct</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Section Hero Body 1</div>
-        <div class="field-value">Reduce manual work, speed up close, and surface insights as you go. Sage AI and Sage Copilot automate reconciliations, reporting, and approvals, so your team can focus on strategy, not spreadsheets.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Title 1</div>
-        <div class="field-value">Close the books 80% faster across entities</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Title 2</div>
-        <div class="field-value">Reduce manual work by up to 90%</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Title 3</div>
-        <div class="field-value">Stay audit-ready and investor confident</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Title 6</div>
-        <div class="field-value">Open API and marketplace integrations</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Title 7</div>
-        <div class="field-value">Advanced fintech metric tracking</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Title 8</div>
-        <div class="field-value">Global currency and tax support</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Body 1</div>
-        <div class="field-value">Automate multi-entity consolidation and reporting.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Body 2</div>
-        <div class="field-value">AI-driven automation cuts repetitive tasks.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Body 3</div>
-        <div class="field-value">Automated controls and clear audit trails.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Body 6</div>
-        <div class="field-value">Connect Sage Intacct to payment gateways, CRM, billing, and compliance tools. Streamline data flow and reporting with integrations built for the fintech industry.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Body 7</div>
-        <div class="field-value">Track CAC, churn, LTV, deferred revenue, and SaaS KPIs in real time. Give your team and investors the metrics they expect from top fintech companies.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Body 8</div>
-        <div class="field-value">Manage multi-currency and international tax requirements across all your entities. Automate currency conversions and local tax compliance as your fintech business expands.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Image 1</div>
-        <div class="field-value">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/accessibility</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Image 2</div>
-        <div class="field-value">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/authentication</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Image 3</div>
-        <div class="field-value">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/addresses</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Image 6</div>
-        <div class="field-value">/Images/Optimisation/NA Hub/intacct-integrations-micro-ui</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Image 7</div>
-        <div class="field-value">/new-brand/Product UI/US/SVGs/sage-intacct/intacct-multi-entity-dashboard-us-comp2-708w478h</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Image 8</div>
-        <div class="field-value">/Images/Optimisation/NA Hub/intacct-intuitive-budgeting-micro-ui</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 1</div>
-        <div class="field-value">How does Sage Intacct help fintech companies scale?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 2</div>
-        <div class="field-value">What makes Sage Intacct different from other fintech software?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 3</div>
-        <div class="field-value">Can Sage Intacct automate revenue recognition for recurring and usage-based billing?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 4</div>
-        <div class="field-value">How does Sage Intacct support audit readiness and compliance for fintech businesses?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 5</div>
-        <div class="field-value">Is Sage Intacct suitable for multi-entity, multi-currency fintech companies?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 6</div>
-        <div class="field-value">How does Sage Intacct integrate with other fintech solutions?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 7</div>
-        <div class="field-value">What are the AI capabilities in Sage Intacct for fintech companies?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 8</div>
-        <div class="field-value">How quickly can a fintech company implement Sage Intacct?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 9</div>
-        <div class="field-value">Can Sage Intacct support compliance with ASC 606, SOX, and IFRS?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 10</div>
-        <div class="field-value">What reporting and dashboard capabilities are available for fintech metrics?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 11</div>
-        <div class="field-value">How does Sage Intacct help manage fintech payments and accounts payable?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Accordion Panel Title 12</div>
-        <div class="field-value">Does Sage Intacct help with global expansion for fintech companies?</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Title 1</div>
-        <div class="field-value">Real-time, dimensional reporting</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Title 2</div>
-        <div class="field-value">Multi-entity consolidation</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Title 3</div>
-        <div class="field-value">Automated revenue recognition</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Title 4</div>
-        <div class="field-value">AI-powered accounts payable automation</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Title 5</div>
-        <div class="field-value">Audit-ready controls and compliance</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Title 6</div>
-        <div class="field-value">Seamless ecosystem integrations</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Body Text 1</div>
-        <div class="field-value">See performance by product, client, or region.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Body Text 2</div>
-        <div class="field-value">Consolidate entities, currencies, and books.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Body Text 3</div>
-        <div class="field-value">Comply with ASC 606 and IFRS 15.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Body Text 4</div>
-        <div class="field-value">Slash invoice processing time and errors.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Body Text 5</div>
-        <div class="field-value">Automate controls to stay compliant.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Panel Body Text 6</div>
-        <div class="field-value">Connect to Salesforce, Stripe, and more.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">SVG 1</div>
-        <div class="field-value">/Images/SageDotCom/Master/Products/intacct/Hero-Intacct-automated-accounting-allocation-comp2-S-6026-US</div>
-      </div>
-      <div class="field">
-        <div class="field-name">SVG 2</div>
-        <div class="field-value">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/intacct-copilot-healthcare-comp2-us-1280w578h</div>
-      </div>
-      <div class="field">
-        <div class="field-name">SVG 3</div>
-        <div class="field-value">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/intacct-copilot-core-financial-comp2-us-1223w736h</div>
-      </div>
-      <div class="field">
-        <div class="field-name">SVG 4</div>
-        <div class="field-value">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/intacct-copilot-healthcare-cp-comp2-us-708w546h</div>
-      </div>
-      <div class="field">
-        <div class="field-name">SVG 5</div>
-        <div class="field-value">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/intacct-copilot-professional-services-comp2-us-1237w767h</div>
-      </div>
-      <div class="field">
-        <div class="field-name">SVG 6</div>
-        <div class="field-value">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/copilot-reconcile-ledger-us-952w608h</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Image 1</div>
-        <div class="field-value">/sitecore/media library/Images/Optimisation/NA Hub/nontransparent_2</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Image 2</div>
-        <div class="field-value">/sitecore/media library/Images/Optimisation/NA Hub/nontransparent_1</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Image 3</div>
-        <div class="field-value">/sitecore/media library/Images/Optimisation/NA Hub/nontransparent_2</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Image 4</div>
-        <div class="field-value"></div>
-      </div>
-      <div class="field">
-        <div class="field-name">Image 5</div>
-        <div class="field-value"></div>
-      </div>
-      <div class="field">
-        <div class="field-name">Image 6</div>
-        <div class="field-value"></div>
-      </div>
-      <div class="field">
-        <div class="field-name">--- NOTE FOR JOE ---</div>
-        <div class="field-value">The fields below were found on the template page but are NOT in the original Micro Vertical Template file. They may already be set in Sitecore. Included here as a reference.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Section Hero Subtitle 1</div>
-        <div class="field-value">Transform finance with Sage AI and Copilot</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Section Hero Body 2</div>
-        <div class="field-value">Sage Intacct delivers the fintech software capabilities you need to manage multi-entity growth, automate revenue operations, and stay compliant, without slowing down.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Section Hero Body 3</div>
-        <div class="field-value">Fintech companies run leaner, move faster, and scale smarter with Sage Intacct. Automate processes, improve accuracy, and get the insights you need for rapid growth and compliance.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Section Hero Title 5</div>
-        <div class="field-value">Extend your fintech technology stack</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Section Hero Body 5</div>
-        <div class="field-value">Sage Intacct open APIs and marketplace let you connect your finance platform to other fintech solutions, building an ecosystem that supports scale, accuracy, and compliance, even as you grow globally.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Title 15</div>
-        <div class="field-value">If technology can do a task for you, why would you do it manually? The time we save with Sage Intacct is time we can use for other value-add activities, such as supporting the company’s anticipated growth of 90% this year, and increasing the complexity of our business operations. By working smarter, we’ll be able to keep up with larger customer and sales volumes without hiring additional people.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Header 15</div>
-        <div class="field-value">Food &amp; Beverage</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Highlight Body 15</div>
-        <div class="field-value">Elliot Woo, Senior Director of Accounting</div>
-      </div>
-      <div class="field">
-        <div class="field-name">--- SEO METADATA (for email only) ---</div>
-        <div class="field-value">These fields are included in the email metadata, not for Sitecore import.</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Open Graph Page Title</div>
-        <div class="field-value">FinTech Accounting Software</div>
-      </div>
-      <div class="field">
-        <div class="field-name">Open Graph Description</div>
-        <div class="field-value">Cloud accounting software for fintech companies. Automate compliance, scale globally, and get real-time insights with Sage Intacct.</div>
-      </div>
-    </div>
+
+  <!-- 1. PREVIEW BANNER -->
+  <div class="preview-banner">
+    PREVIEW &mdash; Generated by Verso &nbsp;&middot;&nbsp; FinTech &nbsp;&middot;&nbsp; US &nbsp;&middot;&nbsp; Apr 10, 2026, 3:35 PM
   </div>
+
+  <!-- 2. HEADER -->
+  <header class="site-header">
+    <div class="header-left">
+      <div class="sage-logo">Sage</div>
+      <nav>
+        <ul class="header-nav">
+          <li><a href="#">Overview</a></li>
+          <li><a href="#">Product capabilities</a></li>
+          <li><a href="#">Extended capabilities</a></li>
+          <li><a href="#">Industry</a></li>
+          <li><a href="#">Partners</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="header-right">
+      <span class="header-phone">1-855-724-3366</span>
+      <a class="btn-primary" href="#">Request pricing</a>
+    </div>
+  </header>
+
+  <!-- 3. HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <span class="green-tag">AI powered Accounting</span>
+        <h1 class="hero-h1">FinTech accounting software built for scale</h1>
+        <p class="hero-body">Streamline finance, automate compliance, and gain real-time insight. Sage Intacct helps fintech companies grow, adapt, and stay audit-ready as you scale.</p>
+        <p class="hero-subtitle">Trusted by top fintech companies</p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-form-card">
+          <h3>Take a self-led product tour</h3>
+          <div class="form-steps">
+            <span class="form-step active">Step 1</span>
+            <span class="form-step inactive">Step 2</span>
+          </div>
+          <div class="form-field">
+            <label>Email</label>
+            <input type="email" placeholder="you@company.com" />
+          </div>
+          <div class="form-field">
+            <label>First name</label>
+            <input type="text" placeholder="First name" />
+          </div>
+          <div class="form-field">
+            <label>Last name</label>
+            <input type="text" placeholder="Last name" />
+          </div>
+          <div class="form-field">
+            <label>Company or organization</label>
+            <input type="text" placeholder="Your company" />
+          </div>
+          <button class="form-submit">Next</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. AI COPILOT -->
+  
+  <section class="ai-copilot">
+    <div class="section-inner">
+      <div class="gradient-border-wrap">
+        <div class="gradient-border-inner">
+          <span class="green-tag">Automated AI Finance Solutions</span>
+          <h2>AI that accelerates fintech workflows</h2>
+          <h3>Transform finance with Sage AI and Copilot</h3>
+          <p>Reduce manual work, speed up close, and surface insights as you go. Sage AI and Sage Copilot automate reconciliations, reporting, and approvals, so your team can focus on strategy, not spreadsheets.</p>
+          <div class="btn-row">
+            <a class="btn-outline" href="#">Take a product Tour</a>
+            <a class="btn-outline" href="#">Request pricing</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. PRODUCT FEATURES -->
+  
+  <section class="product-features">
+    <div class="section-inner">
+      <div class="features-label">Purpose-built features for fintech companies</div>
+      <h2 class="features-heading">Clear financial control</h2>
+      <a class="features-link" href="#">View all core features &rsaquo;</a>
+      <div class="features-columns">
+        <div class="panel-tabs">
+          
+        <div class="panel-tab active" data-idx="0" onclick="activateTab(0)">
+          <div class="panel-tab-title">Real-time, dimensional reporting</div>
+          <div class="panel-tab-body">See performance by product, client, or region.</div>
+        </div>
+        <div class="panel-tab " data-idx="1" onclick="activateTab(1)">
+          <div class="panel-tab-title">Multi-entity consolidation</div>
+          <div class="panel-tab-body">Consolidate entities, currencies, and books.</div>
+        </div>
+        <div class="panel-tab " data-idx="2" onclick="activateTab(2)">
+          <div class="panel-tab-title">Automated revenue recognition</div>
+          <div class="panel-tab-body">Comply with ASC 606 and IFRS 15.</div>
+        </div>
+        <div class="panel-tab " data-idx="3" onclick="activateTab(3)">
+          <div class="panel-tab-title">AI-powered accounts payable automation</div>
+          <div class="panel-tab-body">Slash invoice processing time and errors.</div>
+        </div>
+        <div class="panel-tab " data-idx="4" onclick="activateTab(4)">
+          <div class="panel-tab-title">Audit-ready controls and compliance</div>
+          <div class="panel-tab-body">Automate controls to stay compliant.</div>
+        </div>
+        <div class="panel-tab " data-idx="5" onclick="activateTab(5)">
+          <div class="panel-tab-title">Seamless ecosystem integrations</div>
+          <div class="panel-tab-body">Connect to Salesforce, Stripe, and more.</div>
+        </div>
+        </div>
+        <div class="panel-right">
+          
+        <div class="panel-detail active" id="panel-detail-0">
+          <div class="panel-detail-title">Real-time, dimensional reporting</div>
+          <div class="panel-detail-body">See performance by product, client, or region.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-1">
+          <div class="panel-detail-title">Multi-entity consolidation</div>
+          <div class="panel-detail-body">Consolidate entities, currencies, and books.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-2">
+          <div class="panel-detail-title">Automated revenue recognition</div>
+          <div class="panel-detail-body">Comply with ASC 606 and IFRS 15.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-3">
+          <div class="panel-detail-title">AI-powered accounts payable automation</div>
+          <div class="panel-detail-body">Slash invoice processing time and errors.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-4">
+          <div class="panel-detail-title">Audit-ready controls and compliance</div>
+          <div class="panel-detail-body">Automate controls to stay compliant.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-5">
+          <div class="panel-detail-title">Seamless ecosystem integrations</div>
+          <div class="panel-detail-body">Connect to Salesforce, Stripe, and more.</div>
+        </div>
+          <div style="color:#a0a0a0;font-size:14px;line-height:1.7;margin-bottom:16px;">Track SaaS and fintech business metrics across every dimension, client, product, entity, and region. Surface trends, analyze cash flow, and benchmark against other top fintech companies with real-time dashboards and customizable reports.</div>
+          <div class="screenshot-placeholder">[ Product screenshot ]</div>
+        </div>
+      </div>
+      <div class="features-btns">
+        <a class="btn-outline" href="#">Take a product Tour</a>
+        <a class="btn-primary" href="#">Request pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. BENEFITS -->
+  
+  <section class="benefits">
+    <div class="section-inner">
+      <h2 class="benefits-heading">What fintech companies achieve with Sage Intacct</h2>
+      <p class="benefits-sub">Fintech companies run leaner, move faster, and scale smarter with Sage Intacct. Automate processes, improve accuracy, and get the insights you need for rapid growth and compliance.</p>
+      <div class="benefit-cards">
+        
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap"><div class="benefit-icon"></div></div>
+          <div class="benefit-title">Close the books 80% faster across entities</div>
+          <div class="benefit-body">Automate multi-entity consolidation and reporting.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap"><div class="benefit-icon"></div></div>
+          <div class="benefit-title">Reduce manual work by up to 90%</div>
+          <div class="benefit-body">AI-driven automation cuts repetitive tasks.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap"><div class="benefit-icon"></div></div>
+          <div class="benefit-title">Stay audit-ready and investor confident</div>
+          <div class="benefit-body">Automated controls and clear audit trails.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. CTA / GET STARTED -->
+  <section class="cta-section">
+    <div class="section-inner">
+      <div class="cta-eyebrow">Get started today</div>
+      <h2 class="cta-heading">Learn how to level up with Sage Intacct</h2>
+      <div class="cta-cards">
+        <div class="cta-card">
+          <div class="cta-icon">&#9654;</div>
+          <div class="cta-card-title">Take self-led product tour</div>
+          <div class="cta-card-body">Explore Sage Intacct at your own pace with an interactive guided tour of the product.</div>
+          <a class="btn-primary" href="#">Take a product tour &rarr;</a>
+        </div>
+        <div class="cta-card">
+          <div class="cta-icon">&#128295;</div>
+          <div class="cta-card-title">Talk to an expert</div>
+          <div class="cta-card-body">Connect with a Sage specialist to find the right solution for your business needs.</div>
+          <a class="btn-primary" href="#">Request pricing &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. EXTENDED CAPABILITIES -->
+  
+  <section class="extended">
+    <div class="section-inner">
+      <h2 class="extended-heading">Extend your fintech technology stack</h2>
+      <p class="extended-sub">Sage Intacct open APIs and marketplace let you connect your finance platform to other fintech solutions, building an ecosystem that supports scale, accuracy, and compliance, even as you grow globally.</p>
+      <div class="ext-cards">
+        
+        <div class="ext-card">
+          <div class="ext-screenshot-placeholder"></div>
+          <div class="ext-card-title">Open API and marketplace integrations</div>
+          <div class="ext-card-body">Connect Sage Intacct to payment gateways, CRM, billing, and compliance tools. Streamline data flow and reporting with integrations built for the fintech industry.</div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-screenshot-placeholder"></div>
+          <div class="ext-card-title">Advanced fintech metric tracking</div>
+          <div class="ext-card-body">Track CAC, churn, LTV, deferred revenue, and SaaS KPIs in real time. Give your team and investors the metrics they expect from top fintech companies.</div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-screenshot-placeholder"></div>
+          <div class="ext-card-title">Global currency and tax support</div>
+          <div class="ext-card-body">Manage multi-currency and international tax requirements across all your entities. Automate currency conversions and local tax compliance as your fintech business expands.</div>
+        </div>
+      </div>
+      <a class="btn-outline" href="#">View all core features</a>
+    </div>
+  </section>
+
+  <!-- 9. FAQS -->
+  
+  <section class="faqs">
+    <div class="section-inner">
+      <h2 class="faqs-heading">FAQs</h2>
+      <div class="faq-list">
+        
+        <div class="faq-item active" onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How does Sage Intacct help fintech companies scale?</span>
+            <span class="faq-icon">&#x2715;</span>
+          </div>
+          <div class="faq-answer">Sage Intacct provides multi-entity, multi-currency support with automated consolidations, dimensional reporting, and integrations to fintech solutions. This allows fintech companies to scale operations, onboard new entities quickly, and manage growth without increasing manual workloads or risking data errors.</div>
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">What makes Sage Intacct different from other fintech software?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">Can Sage Intacct automate revenue recognition for recurring and usage-based billing?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How does Sage Intacct support audit readiness and compliance for fintech businesses?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">Is Sage Intacct suitable for multi-entity, multi-currency fintech companies?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How does Sage Intacct integrate with other fintech solutions?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">What are the AI capabilities in Sage Intacct for fintech companies?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How quickly can a fintech company implement Sage Intacct?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">Can Sage Intacct support compliance with ASC 606, SOX, and IFRS?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">What reporting and dashboard capabilities are available for fintech metrics?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How does Sage Intacct help manage fintech payments and accounts payable?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">Does Sage Intacct help with global expansion for fintech companies?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. QUOTES -->
+  <section class="quotes">
+    <div class="section-inner">
+      <div class="quotes-eyebrow">AI-powered finance</div>
+      <h2 class="quotes-heading">Trusted by over 24,500 businesses</h2>
+      <p class="quotes-sub">Join thousands of finance leaders who rely on Sage Intacct for greater visibility, efficiency, and control.</p>
+      <div class="quote-cards">
+        <div class="quote-card">
+        <div class="quote-category">Food &amp; Beverage</div>
+        <div class="quote-text">&ldquo;If technology can do a task for you, why would you do it manually? The time we save with Sage Intacct is time we can use for other value-add activities, such as supporting the company’s anticipated growth of 90% this year, and increasing the complexity of our business operations. By working smarter, we’ll be able to keep up with larger customer and sales volumes without hiring additional people.&rdquo;</div>
+        <div class="quote-attr">&mdash; Elliot Woo, Senior Director of Accounting</div>
+      </div>
+        <div class="quote-placeholder">
+          <div class="quote-placeholder-bar"></div>
+          <div class="quote-placeholder-bar"></div>
+          <div class="quote-placeholder-bar short"></div>
+        </div>
+        <div class="quote-placeholder">
+          <div class="quote-placeholder-bar"></div>
+          <div class="quote-placeholder-bar"></div>
+          <div class="quote-placeholder-bar short"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-logo">Sage</div>
+        <div class="footer-social">
+          <a href="#">FB</a>
+          <a href="#">Instagram</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">X</a>
+          <a href="#">YouTube</a>
+        </div>
+        <div class="footer-links">
+          <a href="#">Become a partner</a>
+          <a href="#">Developer documentation</a>
+          <a href="#">Privacy policy</a>
+          <a href="#">Cookie settings</a>
+          <a href="#">Accessibility</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Sage Group plc or its licensors. All rights reserved. &nbsp;&middot;&nbsp; Preview generated by Verso.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function activateTab(idx) {
+      document.querySelectorAll('.panel-tab').forEach(function(t, i) {
+        t.classList.toggle('active', i === idx);
+      });
+      document.querySelectorAll('.panel-detail').forEach(function(d, i) {
+        d.classList.toggle('active', i === idx);
+      });
+    }
+
+    function toggleFaq(item) {
+      var isActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(function(f) {
+        f.classList.remove('active');
+        var icon = f.querySelector('.faq-icon');
+        if (icon) icon.innerHTML = '&#x2039;';
+        var ans = f.querySelector('.faq-answer');
+        if (ans) ans.remove();
+      });
+      if (!isActive) {
+        item.classList.add('active');
+        var icon = item.querySelector('.faq-icon');
+        if (icon) icon.innerHTML = '&#x2715;';
+        var answer = document.createElement('div');
+        answer.className = 'faq-answer';
+        answer.textContent = 'See the full answer on the live page.';
+        item.appendChild(answer);
+      }
+    }
+  </script>
+
 </body>
 </html>
