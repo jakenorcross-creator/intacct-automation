@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare — Sage Intacct Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111111;
+      color: #fff;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── PREVIEW BANNER ── */
+    .preview-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: #00d959;
+      color: #000;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 8px 16px;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: #1d1d1d;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 36px;
+      z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 32px; }
+    .sage-logo { font-size: 22px; font-weight: 800; color: #00d959; letter-spacing: -0.02em; }
+    .header-nav { display: flex; gap: 24px; list-style: none; }
+    .header-nav a { color: #ccc; font-size: 14px; text-decoration: none; }
+    .header-nav a:hover { color: #fff; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-phone { color: #aaa; font-size: 13px; }
+    .btn-primary {
+      background: #00d959;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline {
+      background: transparent;
+      color: #00d959;
+      border: 1px solid #00d959;
+      border-radius: 4px;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline:hover { background: rgba(0,217,89,0.1); }
+
+    /* ── SHARED LAYOUT ── */
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .green-tag {
+      display: inline-block;
+      border: 1px solid #00d959;
+      color: #00d959;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 4px 12px;
+      margin-bottom: 16px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0d1a12 0%, #111 60%, #0d0d1a 100%);
+      padding: 80px 24px 64px;
+      margin-top: 36px;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+    .hero-left { flex: 1 1 60%; }
+    .hero-right { flex: 0 0 360px; }
+    .hero-h1 {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero-body { color: #a0a0a0; font-size: 17px; line-height: 1.7; margin-bottom: 16px; }
+    .hero-subtitle { color: #888; font-size: 14px; }
+    .hero-form-card {
+      background: #fff;
+      color: #111;
+      border-radius: 8px;
+      padding: 28px;
+    }
+    .hero-form-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #111; }
+    .form-steps { display: flex; gap: 8px; margin-bottom: 20px; }
+    .form-step {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .form-step.active { background: #00d959; color: #000; }
+    .form-step.inactive { background: #e5e5e5; color: #888; }
+    .form-field { margin-bottom: 14px; }
+    .form-field label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 4px; }
+    .form-field input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      background: #fff;
+      color: #111;
+    }
+    .form-submit { margin-top: 18px; width: 100%; background: #00d959; color: #000; border: none; border-radius: 4px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
+
+    /* ── AI COPILOT ── */
+    .ai-copilot { background: #111; padding: 80px 24px; }
+    .gradient-border-wrap {
+      background: linear-gradient(135deg, #7b2ff7, #00d959);
+      border-radius: 12px;
+      padding: 2px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .gradient-border-inner {
+      background: #111;
+      border-radius: 10px;
+      padding: 48px;
+    }
+    .ai-copilot h2 { font-size: clamp(26px, 3vw, 40px); font-weight: 800; color: #fff; margin-bottom: 12px; }
+    .ai-copilot h3 { font-size: 18px; font-weight: 600; color: #ccc; margin-bottom: 16px; }
+    .ai-copilot p { color: #a0a0a0; font-size: 16px; line-height: 1.7; margin-bottom: 28px; }
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── PRODUCT FEATURES ── */
+    .product-features { background: #0e0e0e; padding: 80px 24px; }
+    .features-label { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #00d959; margin-bottom: 10px; }
+    .features-heading { font-size: clamp(24px, 3vw, 38px); font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .features-link { color: #00d959; font-size: 14px; text-decoration: none; display: inline-block; margin-bottom: 36px; }
+    .features-link:hover { text-decoration: underline; }
+    .features-columns { display: flex; gap: 32px; align-items: flex-start; }
+    .panel-tabs { flex: 0 0 340px; display: flex; flex-direction: column; gap: 0; }
+    .panel-tab {
+      padding: 18px 20px;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      border-bottom: 1px solid #222;
+      transition: border-color 0.2s;
+    }
+    .panel-tab:hover { border-left-color: #00d95966; }
+    .panel-tab.active { border-left-color: #00d959; background: #161616; }
+    .panel-tab-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .panel-tab-body { font-size: 13px; color: #888; display: none; }
+    .panel-tab.active .panel-tab-body { display: block; }
+    .panel-right { flex: 1; }
+    .panel-detail { display: none; }
+    .panel-detail.active { display: block; }
+    .panel-detail-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+    .panel-detail-body { color: #a0a0a0; font-size: 15px; line-height: 1.7; margin-bottom: 16px; }
+    .panel-detail-spot { color: #a0a0a0; font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+    .screenshot-placeholder {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+    .features-btns { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── BENEFITS ── */
+    .benefits { background: #111; padding: 80px 24px; }
+    .benefits-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .benefits-sub { color: #a0a0a0; font-size: 16px; margin-bottom: 40px; }
+    .benefit-cards { display: flex; gap: 24px; flex-wrap: wrap; }
+    .benefit-card {
+      flex: 1 1 280px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 28px;
+    }
+    .benefit-icon-wrap { margin-bottom: 16px; }
+    .benefit-icon {
+      width: 40px; height: 40px;
+      background: #00d959;
+      border-radius: 50%;
+      opacity: 0.85;
+    }
+    .benefit-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .benefit-body { color: #a0a0a0; font-size: 14px; line-height: 1.65; }
+
+    /* ── CTA ── */
+    .cta-section { background: #0e0e0e; padding: 80px 24px; }
+    .cta-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #00d959; margin-bottom: 12px; }
+    .cta-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; margin-bottom: 40px; }
+    .cta-cards { display: flex; gap: 24px; flex-wrap: wrap; }
+    .cta-card {
+      flex: 1 1 280px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 32px;
+      transition: border-color 0.2s;
+    }
+    .cta-card:hover { border-color: #00d959; }
+    .cta-icon { font-size: 28px; margin-bottom: 16px; }
+    .cta-card-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .cta-card-body { color: #a0a0a0; font-size: 14px; line-height: 1.65; margin-bottom: 20px; }
+    .cta-card .btn-primary { font-size: 13px; }
+
+    /* ── EXTENDED CAPABILITIES ── */
+    .extended { background: #111; padding: 80px 24px; }
+    .extended-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .extended-sub { color: #a0a0a0; font-size: 16px; margin-bottom: 40px; }
+    .ext-cards { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 36px; }
+    .ext-card {
+      flex: 1 1 280px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .ext-screenshot-placeholder {
+      background: #252525;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ext-card-title { font-size: 16px; font-weight: 700; color: #fff; padding: 20px 20px 6px; }
+    .ext-card-body { color: #a0a0a0; font-size: 13px; line-height: 1.6; padding: 0 20px 20px; }
+
+    /* ── FAQS ── */
+    .faqs { background: #0e0e0e; padding: 80px 24px; }
+    .faqs-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; text-align: center; margin-bottom: 40px; }
+    .faq-list { max-width: 780px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid #222;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      padding-left: 16px;
+      transition: border-color 0.2s;
+    }
+    .faq-item:hover { border-left-color: #00d95966; }
+    .faq-item.active { border-left-color: #00d959; }
+    .faq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 12px 18px 0;
+    }
+    .faq-title { font-size: 15px; font-weight: 600; color: #fff; }
+    .faq-icon { color: #00d959; font-size: 18px; font-weight: 700; }
+    .faq-answer { color: #a0a0a0; font-size: 14px; line-height: 1.7; padding-bottom: 18px; padding-right: 12px; }
+
+    /* ── QUOTES ── */
+    .quotes { background: #111; padding: 80px 24px; }
+    .quotes-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #00d959; margin-bottom: 12px; }
+    .quotes-heading { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .quotes-sub { color: #a0a0a0; font-size: 16px; margin-bottom: 40px; }
+    .quote-cards { display: flex; gap: 24px; flex-wrap: wrap; }
+    .quote-card {
+      flex: 1 1 260px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 28px;
+    }
+    .quote-category { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #00d959; margin-bottom: 14px; }
+    .quote-text { font-size: 15px; color: #fff; line-height: 1.65; font-style: italic; margin-bottom: 16px; }
+    .quote-attr { font-size: 13px; color: #888; }
+    .quote-placeholder { flex: 1 1 260px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 28px; }
+    .quote-placeholder-bar { height: 10px; background: #252525; border-radius: 4px; margin-bottom: 10px; }
+    .quote-placeholder-bar.short { width: 60%; }
+
+    /* ── FOOTER ── */
+    .site-footer { background: #111; border-top: 1px solid #222; padding: 48px 24px 32px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; flex-wrap: wrap; gap: 24px; }
+    .footer-logo { font-size: 24px; font-weight: 800; color: #00d959; }
+    .footer-social { display: flex; gap: 16px; }
+    .footer-social a { color: #666; font-size: 13px; text-decoration: none; }
+    .footer-social a:hover { color: #aaa; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { color: #666; font-size: 13px; text-decoration: none; }
+    .footer-links a:hover { color: #aaa; }
+    .footer-bottom { border-top: 1px solid #222; padding-top: 20px; color: #555; font-size: 12px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-inner { flex-direction: column; }
+      .hero-right { width: 100%; }
+      .features-columns { flex-direction: column; }
+      .panel-tabs { width: 100%; }
+      .header-nav { display: none; }
+      .header-phone { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. PREVIEW BANNER -->
+  <div class="preview-banner">
+    PREVIEW &mdash; Generated by Folio &nbsp;&middot;&nbsp; Healthcare &nbsp;&middot;&nbsp; UK &nbsp;&middot;&nbsp; Apr 13, 2026, 11:28 AM
+  </div>
+
+  <!-- 2. HEADER -->
+  <header class="site-header">
+    <div class="header-left">
+      <div class="sage-logo">Sage</div>
+      <nav>
+        <ul class="header-nav">
+          <li><a href="#">Overview</a></li>
+          <li><a href="#">Product capabilities</a></li>
+          <li><a href="#">Extended capabilities</a></li>
+          <li><a href="#">Industry</a></li>
+          <li><a href="#">Partners</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="header-right">
+      <span class="header-phone">1-855-724-3366</span>
+      <a class="btn-primary" href="#">Request pricing</a>
+    </div>
+  </header>
+
+  <!-- 3. HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <span class="green-tag">AI powered Accounting</span>
+        <h1 class="hero-h1">Healthcare finance made simple</h1>
+        <p class="hero-body">Manage finances, automate compliance, and gain real-time visibility across clinics, departments, and locations. Built for healthcare organisations that need audit-ready reporting.</p>
+        <p class="hero-subtitle">Streamline operations across your organisation</p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-form-card">
+          <h3>Take a self-led product tour</h3>
+          <div class="form-steps">
+            <span class="form-step active">Step 1</span>
+            <span class="form-step inactive">Step 2</span>
+          </div>
+          <div class="form-field">
+            <label>Email</label>
+            <input type="email" placeholder="you@company.com" />
+          </div>
+          <div class="form-field">
+            <label>First name</label>
+            <input type="text" placeholder="First name" />
+          </div>
+          <div class="form-field">
+            <label>Last name</label>
+            <input type="text" placeholder="Last name" />
+          </div>
+          <div class="form-field">
+            <label>Company or organization</label>
+            <input type="text" placeholder="Your company" />
+          </div>
+          <button class="form-submit">Next</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. AI COPILOT -->
+  
+  <section class="ai-copilot">
+    <div class="section-inner">
+      <div class="gradient-border-wrap">
+        <div class="gradient-border-inner">
+          <span class="green-tag">Automated AI Finance Solutions</span>
+          <h2>Intelligent automation for healthcare</h2>
+          <h3>Sage AI and Sage Copilot streamline your workflows</h3>
+          <p>Automate month-end processes and surface insights faster with AI that learns your healthcare finance patterns. Get real-time recommendations without manual data entry.</p>
+          <div class="btn-row">
+            <a class="btn-outline" href="#">Take a product Tour</a>
+            <a class="btn-outline" href="#">Request pricing</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. PRODUCT FEATURES -->
+  
+  <section class="product-features">
+    <div class="section-inner">
+      <div class="features-label">Built for healthcare organisations</div>
+      <h2 class="features-heading">Clear financial control</h2>
+      <a class="features-link" href="#">View all core features &rsaquo;</a>
+      <div class="features-columns">
+        <div class="panel-tabs">
+          
+        <div class="panel-tab active" data-idx="0" onclick="activateTab(0)">
+          <div class="panel-tab-title">Multi-entity consolidation</div>
+          <div class="panel-tab-body">Unify all locations.</div>
+        </div>
+        <div class="panel-tab " data-idx="1" onclick="activateTab(1)">
+          <div class="panel-tab-title">Real-time reporting</div>
+          <div class="panel-tab-body">See live performance.</div>
+        </div>
+        <div class="panel-tab " data-idx="2" onclick="activateTab(2)">
+          <div class="panel-tab-title">Automated AP workflows</div>
+          <div class="panel-tab-body">Process invoices faster.</div>
+        </div>
+        <div class="panel-tab " data-idx="3" onclick="activateTab(3)">
+          <div class="panel-tab-title">HIPAA-ready compliance</div>
+          <div class="panel-tab-body">Protect patient data.</div>
+        </div>
+        <div class="panel-tab " data-idx="4" onclick="activateTab(4)">
+          <div class="panel-tab-title">Project accounting</div>
+          <div class="panel-tab-body">Track project costs.</div>
+        </div>
+        <div class="panel-tab " data-idx="5" onclick="activateTab(5)">
+          <div class="panel-tab-title">Cash flow management</div>
+          <div class="panel-tab-body">Optimise working capital.</div>
+        </div>
+        </div>
+        <div class="panel-right">
+          
+        <div class="panel-detail active" id="panel-detail-0">
+          <div class="panel-detail-title">Multi-entity consolidation</div>
+          <div class="panel-detail-body">Unify all locations.</div>
+          <div class="panel-detail-spot">Consolidate financials across clinics, departments, and regions in minutes, not days. Automated eliminations and standardised reporting give you complete visibility into performance across your healthcare organisation.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-1">
+          <div class="panel-detail-title">Real-time reporting</div>
+          <div class="panel-detail-body">See live performance.</div>
+          <div class="panel-detail-spot">Track key metrics by location, department, or service line with dimensional reporting. Monitor cash flow, profitability, and operational KPIs with dashboards built for healthcare management decisions.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-2">
+          <div class="panel-detail-title">Automated AP workflows</div>
+          <div class="panel-detail-body">Process invoices faster.</div>
+          <div class="panel-detail-spot">Streamline vendor payments with automated invoice capture, approval routing, and payment processing. Reduce manual work whilst maintaining the controls your healthcare business requires.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-3">
+          <div class="panel-detail-title">HIPAA-ready compliance</div>
+          <div class="panel-detail-body">Protect patient data.</div>
+          <div class="panel-detail-spot">Built-in audit trails and access controls ensure HIPAA compliance. Advanced security features protect sensitive financial and operational data across your healthcare organisation.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-4">
+          <div class="panel-detail-title">Project accounting</div>
+          <div class="panel-detail-body">Track project costs.</div>
+          <div class="panel-detail-spot">Monitor costs and profitability by project, grant, or service line. Allocate expenses accurately and generate reports for funders, boards, or internal stakeholders with ease.</div>
+        </div>
+        <div class="panel-detail " id="panel-detail-5">
+          <div class="panel-detail-title">Cash flow management</div>
+          <div class="panel-detail-body">Optimise working capital.</div>
+          <div class="panel-detail-spot">Sage Copilot helps finance and accounting teams work faster and smarter. From accelerating month-end close to flagging budget variances, Sage Copilot brings speed, clarity, and confidence to every task.</div>
+        </div>
+          <div class="screenshot-placeholder">[ Product screenshot ]</div>
+        </div>
+      </div>
+      <div class="features-btns">
+        <a class="btn-outline" href="#">Take a product Tour</a>
+        <a class="btn-primary" href="#">Request pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. BENEFITS -->
+  
+  <section class="benefits">
+    <div class="section-inner">
+      <h2 class="benefits-heading">Healthcare finance outcomes</h2>
+      <p class="benefits-sub">Proven results for healthcare organisations across the UK. Faster closes, better visibility, and streamlined operations.</p>
+      <div class="benefit-cards">
+        
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap"><div class="benefit-icon"></div></div>
+          <div class="benefit-title">Close books 50-75% faster with automated consolidations</div>
+          <div class="benefit-body">Automate and close 75% faster</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap"><div class="benefit-icon"></div></div>
+          <div class="benefit-title">Reduce manual work by 40-60 hours monthly across teams</div>
+          <div class="benefit-body">Save 40-60 hours monthly</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap"><div class="benefit-icon"></div></div>
+          <div class="benefit-title">Gain real-time visibility into profitability by location</div>
+          <div class="benefit-body">Real-time profitability insights</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. CTA / GET STARTED -->
+  <section class="cta-section">
+    <div class="section-inner">
+      <div class="cta-eyebrow">Get started today</div>
+      <h2 class="cta-heading">Learn how to level up with Sage Intacct</h2>
+      <div class="cta-cards">
+        <div class="cta-card">
+          <div class="cta-icon">&#9654;</div>
+          <div class="cta-card-title">Take self-led product tour</div>
+          <div class="cta-card-body">Explore Sage Intacct at your own pace with an interactive guided tour of the product.</div>
+          <a class="btn-primary" href="#">Take a product tour &rarr;</a>
+        </div>
+        <div class="cta-card">
+          <div class="cta-icon">&#128295;</div>
+          <div class="cta-card-title">Talk to an expert</div>
+          <div class="cta-card-body">Connect with a Sage specialist to find the right solution for your business needs.</div>
+          <a class="btn-primary" href="#">Request pricing &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. EXTENDED CAPABILITIES -->
+  
+  <section class="extended">
+    <div class="section-inner">
+      <h2 class="extended-heading">Extended healthcare capabilities</h2>
+      <p class="extended-sub">Advanced features and integrations that grow with your healthcare organisation. Connect systems and automate complex processes.</p>
+      <div class="ext-cards">
+        
+        <div class="ext-card">
+          <div class="ext-screenshot-placeholder"></div>
+          <div class="ext-card-title">EMR integration</div>
+          <div class="ext-card-body">Connect clinical and financial data with EMRConnect. Sync encounter data, charges, and payer information directly into your dimensional GL for complete cost-per-patient visibility.</div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-screenshot-placeholder"></div>
+          <div class="ext-card-title">Revenue cycle management</div>
+          <div class="ext-card-body">Streamline billing and collections with integrated revenue cycle tools. Track claims, manage denials, and optimise payer relationships with real-time analytics and automated workflows.</div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-screenshot-placeholder"></div>
+          <div class="ext-card-title">Advanced analytics</div>
+          <div class="ext-card-body">Built-in dashboards and reporting tools provide insights into key healthcare metrics. Track patient volumes, service line profitability, and operational efficiency across your organisation.</div>
+        </div>
+      </div>
+      <a class="btn-outline" href="#">View all core features</a>
+    </div>
+  </section>
+
+  <!-- 9. FAQS -->
+  
+  <section class="faqs">
+    <div class="section-inner">
+      <h2 class="faqs-heading">FAQs</h2>
+      <div class="faq-list">
+        
+        <div class="faq-item active" onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How does Sage Intacct handle multi-location healthcare organisations?</span>
+            <span class="faq-icon">&#x2715;</span>
+          </div>
+          <div class="faq-answer">Sage Intacct consolidates financials across unlimited locations automatically. Each clinic or department can maintain its own chart of accounts whilst rolling up into consolidated reporting. You get real-time visibility into performance by location, service line, or any other dimension you need to track.</div>
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">Is Sage Intacct HIPAA compliant for healthcare organisations?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How quickly can healthcare organisations implement Sage Intacct?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">Can Sage Intacct integrate with our existing EMR system?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How does Sage Intacct support healthcare compliance reporting?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">What healthcare-specific reporting does Sage Intacct provide?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">Can Sage Intacct handle complex healthcare revenue recognition?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How does Sage Intacct support healthcare mergers and acquisitions?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">What budgeting and forecasting tools are available for healthcare?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">How does Sage Intacct handle healthcare grant management?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">Can Sage Intacct manage healthcare supply chain costs?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+        <div class="faq-item " onclick="toggleFaq(this)">
+          <div class="faq-header">
+            <span class="faq-title">What mobile access does Sage Intacct provide for healthcare teams?</span>
+            <span class="faq-icon">&#x2039;</span>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. QUOTES -->
+  <section class="quotes">
+    <div class="section-inner">
+      <div class="quotes-eyebrow">AI-powered finance</div>
+      <h2 class="quotes-heading">Trusted by over 24,500 businesses</h2>
+      <p class="quotes-sub">Join thousands of finance leaders who rely on Sage Intacct for greater visibility, efficiency, and control.</p>
+      <div class="quote-cards">
+        
+        <div class="quote-placeholder">
+          <div class="quote-placeholder-bar"></div>
+          <div class="quote-placeholder-bar"></div>
+          <div class="quote-placeholder-bar short"></div>
+        </div>
+        <div class="quote-placeholder">
+          <div class="quote-placeholder-bar"></div>
+          <div class="quote-placeholder-bar"></div>
+          <div class="quote-placeholder-bar short"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-logo">Sage</div>
+        <div class="footer-social">
+          <a href="#">FB</a>
+          <a href="#">Instagram</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">X</a>
+          <a href="#">YouTube</a>
+        </div>
+        <div class="footer-links">
+          <a href="#">Become a partner</a>
+          <a href="#">Developer documentation</a>
+          <a href="#">Privacy policy</a>
+          <a href="#">Cookie settings</a>
+          <a href="#">Accessibility</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Sage Group plc or its licensors. All rights reserved. &nbsp;&middot;&nbsp; Preview generated by Folio.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function activateTab(idx) {
+      document.querySelectorAll('.panel-tab').forEach(function(t, i) {
+        t.classList.toggle('active', i === idx);
+      });
+      document.querySelectorAll('.panel-detail').forEach(function(d, i) {
+        d.classList.toggle('active', i === idx);
+      });
+    }
+
+    function toggleFaq(item) {
+      var isActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(function(f) {
+        f.classList.remove('active');
+        var icon = f.querySelector('.faq-icon');
+        if (icon) icon.innerHTML = '&#x2039;';
+        var ans = f.querySelector('.faq-answer');
+        if (ans) ans.remove();
+      });
+      if (!isActive) {
+        item.classList.add('active');
+        var icon = item.querySelector('.faq-icon');
+        if (icon) icon.innerHTML = '&#x2715;';
+        var answer = document.createElement('div');
+        answer.className = 'faq-answer';
+        answer.textContent = 'See the full answer on the live page.';
+        item.appendChild(answer);
+      }
+    }
+  </script>
+
+</body>
+</html>
