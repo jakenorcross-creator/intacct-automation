@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Webinar — Sage Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f5f5f5;
+      color: #1d1d1b;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── PREVIEW BANNER ── */
+    .preview-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: #00d639;
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 8px 16px;
+    }
+    .preview-banner-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      align-items: baseline;
+    }
+    .preview-badge { text-transform: uppercase; letter-spacing: 0.08em; }
+    .preview-meta { font-weight: 400; font-size: 12px; opacity: 0.85; }
+    .preview-seo {
+      width: 100%;
+      font-weight: 400;
+      font-size: 11px;
+      opacity: 0.75;
+      padding-top: 2px;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 52px;
+      z-index: 100;
+    }
+    .sage-logo { font-size: 22px; font-weight: 800; color: #00cf35; letter-spacing: -0.02em; }
+    .header-nav { display: flex; gap: 24px; list-style: none; }
+    .header-nav a { color: #555; font-size: 14px; text-decoration: none; }
+    .header-right { display: flex; gap: 12px; }
+    .btn-primary {
+      background: #00cf35;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      padding: 9px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: #1d1d1b;
+      padding: 80px 24px 72px;
+      margin-top: 52px;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 56px;
+      align-items: flex-start;
+    }
+    .hero-left { flex: 1 1 55%; }
+    .hero-right { flex: 0 0 380px; }
+    .webinar-tag {
+      display: inline-block;
+      border: 1px solid #00cf35;
+      color: #00cf35;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 20px;
+    }
+    .hero-h1 {
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .hero-spot1 {
+      color: #b0b0a8;
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .hero-body {
+      color: #909088;
+      font-size: 15px;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+    .hero-body p { margin-bottom: 8px; }
+    .hero-body strong { color: #c8c8c0; font-weight: 600; }
+    .hero-cta-btn {
+      display: inline-block;
+      background: #00cf35;
+      color: #000;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 13px 28px;
+      text-decoration: none;
+    }
+    .hero-image-area {
+      background: #2a2a28;
+      border: 1px solid #383836;
+      border-radius: 8px;
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+    }
+    .hero-image-label {
+      color: #555;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero-image-path {
+      color: #00cf35;
+      font-size: 12px;
+      font-family: monospace;
+      text-align: center;
+      word-break: break-all;
+      opacity: 0.8;
+    }
+
+    /* ── SECTION SHARED ── */
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #00cf35;
+      margin-bottom: 14px;
+    }
+
+    /* ── VALUE / NARRATIVE ── */
+    .value-section {
+      background: #fff;
+      padding: 80px 24px;
+    }
+    .value-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .value-body {
+      color: #333;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .value-body p { margin-bottom: 18px; }
+
+    /* ── WHAT YOU'LL LEARN ── */
+    .learn-section {
+      background: #f0f0ee;
+      padding: 72px 24px;
+    }
+    .learn-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .learn-heading {
+      font-size: clamp(22px, 2.5vw, 30px);
+      font-weight: 800;
+      color: #1d1d1b;
+      margin-bottom: 28px;
+    }
+    .learn-list ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .learn-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 16px;
+      color: #222;
+      line-height: 1.6;
+    }
+    .learn-list li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      background: #00cf35;
+      border-radius: 50%;
+    }
+
+    /* ── SIGN-OFF ── */
+    .signoff-section {
+      background: #1d1d1b;
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .signoff-text {
+      max-width: 680px;
+      margin: 0 auto 28px;
+      color: #ccc;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    /* ── SPEAKERS ── */
+    .speakers-section {
+      background: #fff;
+      padding: 80px 24px;
+    }
+    .speakers-heading {
+      font-size: clamp(22px, 2.5vw, 30px);
+      font-weight: 800;
+      color: #1d1d1b;
+      margin-bottom: 32px;
+    }
+    .speakers-html img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      display: block;
+      margin-bottom: 10px;
+      object-fit: cover;
+      /* Show as placeholder since Sitecore paths won't resolve */
+      filter: grayscale(1) opacity(0.3);
+    }
+    .speakers-html h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1d1d1b;
+      margin-bottom: 16px;
+    }
+    .speakers-html p {
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .speakers-html strong { color: #1d1d1b; }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: #1d1d1b;
+      border-top: 1px solid #2a2a2a;
+      padding: 40px 24px 28px;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #00cf35; margin-bottom: 16px; }
+    .footer-bottom { margin-top: 12px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-inner { flex-direction: column; }
+      .hero-right { width: 100%; }
+      .header-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PREVIEW BANNER -->
+  <div class="preview-banner">
+    <div class="preview-banner-inner">
+      <span class="preview-badge">Preview</span>
+      <span class="preview-meta">Generated by Folio &nbsp;&middot;&nbsp; Healthcare &nbsp;&middot;&nbsp; US &nbsp;&middot;&nbsp; Apr 14, 2026, 12:48 PM</span>
+      <div class="preview-seo">Page Title: Multi-entity healthcare reporting webinar | Sage Intacct &nbsp;&middot;&nbsp; Meta: Learn how healthcare finance leaders streamline multi-entity consolidation and close faster. Register for our Sage Intacct webinar with real examples.</div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="sage-logo">Sage</div>
+    <nav>
+      <ul class="header-nav">
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Events</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <a class="btn-primary" href="#">Register now</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <span class="webinar-tag">Webinar</span>
+        <h1 class="hero-h1">Streamline healthcare consolidation and close faster</h1>
+        <p class="hero-spot1">See how healthcare CFOs eliminate manual consolidation work and gain real-time visibility across entities. Learn practical steps to close faster while meeting compliance requirements.</p>
+        <div class="hero-body"><p>Join us to see how Sage Intacct helps healthcare finance teams consolidate entities faster and stay audit-ready.</p><p><strong>Date: </strong>May 15, 2026</p><p><strong>Time: </strong>11:00 AM - 12:00 PM ET</p></div>
+        <a class="hero-cta-btn" href="#">Register now</a>
+      </div>
+      <div class="hero-right">
+        <div class="hero-image-area">
+          <span class="hero-image-label">Hero image</span>
+          <span class="hero-image-path">/Images/SageDotCom/Master/Products/intacct/industry/healthcare/Hero-Intacct-Healthcare-dashboard-comp1-S-6165-US</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE / NARRATIVE -->
+  
+  <section class="value-section">
+    <div class="value-inner">
+      <div class="section-label">About this webinar</div>
+      <div class="value-body"><p>Managing financials across multiple healthcare entities means endless spreadsheets, manual consolidation work, and month-end closes that drag on for weeks. You spend more time reconciling data than analyzing what it means for your organization.</p><p>This webinar shows you how healthcare CFOs are consolidating entities automatically and closing their books faster. You'll see real examples of dimensional reporting that gives you visibility into each location's performance without the manual work.</p><p>Discover how cloud-native financial management helps you meet healthcare compliance requirements while scaling your operations. See the specific features that turn complex multi-entity reporting into a streamlined, audit-ready process.</p></div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU'LL LEARN -->
+  
+  <section class="learn-section">
+    <div class="learn-inner">
+      <h2 class="learn-heading">What you'll learn</h2>
+      <div class="learn-list"><ul><li style="z-index: 1;">How to automate multi-entity consolidation and eliminate manual reconciliation work</li><li style="z-index: 1;">Ways to gain real-time visibility into financial performance across all your healthcare locations</li></ul></div>
+    </div>
+  </section>
+
+  <!-- SIGN-OFF -->
+  
+  <section class="signoff-section">
+    <div class="section-inner">
+      <p class="signoff-text">Register today to see how Sage Intacct transforms multi-entity healthcare financial management from manual burden to strategic advantage.</p>
+      <a class="hero-cta-btn" href="#">Register now</a>
+    </div>
+  </section>
+
+  <!-- SPEAKERS -->
+  
+  <section class="speakers-section">
+    <div class="section-inner">
+      <div class="speakers-html"><h3 style="z-index: 1;">Speakers:</h3><p style="z-index: 1;"><strong><img alt="" style="height:174px; width:174px;" src="-/media/9c1ede773f4d42bf91c06bbdb061bd2d.ashx?la=en-gb&amp;h=174&amp;w=174" /><br />Sarah Chen&nbsp;<br /></strong></p><p style="z-index: 1;"><strong><img alt="" style="height:174px; width:174px;" src="-/media/9c1ede773f4d42bf91c06bbdb061bd2d.ashx?la=en-gb&amp;h=174&amp;w=174" /><br />VP of Product Management&nbsp;<br /></strong></p><p style="z-index: 1;"><strong><img alt="" style="height:174px; width:174px;" src="-/media/9c1ede773f4d42bf91c06bbdb061bd2d.ashx?la=en-gb&amp;h=174&amp;w=174" /><br />Dr. Michael Torres&nbsp;<br /></strong></p><p style="z-index: 1;"><strong><img alt="" style="height:174px; width:174px;" src="-/media/9c1ede773f4d42bf91c06bbdb061bd2d.ashx?la=en-gb&amp;h=174&amp;w=174" /><br />CFO at Meridian Health Partners&nbsp;<br /></strong></p></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-logo">Sage</div>
+    <div class="footer-bottom">
+      &copy; 2026 Sage Group plc or its licensors. All rights reserved. &nbsp;&middot;&nbsp; Preview generated by Folio.
+    </div>
+  </footer>
+
+</body>
+</html>
