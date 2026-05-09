@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR Tech Report — Sage Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f5f5f5;
+      color: #1d1d1b;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── PREVIEW BANNER ── */
+    .preview-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: #00d639;
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 8px 16px;
+    }
+    .preview-banner-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      align-items: baseline;
+    }
+    .preview-badge { text-transform: uppercase; letter-spacing: 0.08em; }
+    .preview-meta { font-weight: 400; font-size: 12px; opacity: 0.85; }
+    .preview-seo {
+      width: 100%;
+      font-weight: 400;
+      font-size: 11px;
+      opacity: 0.75;
+      padding-top: 2px;
+    }
+
+    /* ── REVIEW NOTE BANNER ── */
+    .review-note-banner {
+      background: #fff8c5;
+      border-bottom: 2px solid #e6b800;
+      padding: 12px 24px;
+      margin-top: 52px;
+    }
+    .review-note-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .review-note-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .review-note-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #7a5c00;
+      line-height: 1.5;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      z-index: 100;
+    }
+    .site-header--with-note { top: 52px; }
+    .site-header--no-note { top: 52px; }
+    .sage-logo { font-size: 22px; font-weight: 800; color: #00cf35; letter-spacing: -0.02em; }
+    .header-nav { display: flex; gap: 24px; list-style: none; }
+    .header-nav a { color: #555; font-size: 14px; text-decoration: none; }
+    .header-right { display: flex; gap: 12px; }
+    .btn-primary {
+      background: #00cf35;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      padding: 9px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: #1d1d1b;
+      padding: 80px 24px 72px;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 56px;
+      align-items: flex-start;
+    }
+    .hero-left { flex: 1 1 55%; }
+    .hero-right { flex: 0 0 380px; }
+    .eyebrow-tag {
+      display: inline-block;
+      border: 1px solid #00cf35;
+      color: #00cf35;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 20px;
+    }
+    .hero-h1 {
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .hero-subtitle {
+      color: #b0b0a8;
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .hero-cta-btn {
+      display: inline-block;
+      background: #00cf35;
+      color: #000;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 13px 28px;
+      text-decoration: none;
+    }
+    .hero-image-area {
+      background: #2a2a28;
+      border: 1px solid #383836;
+      border-radius: 8px;
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+    }
+    .hero-image-label {
+      color: #555;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero-image-path {
+      color: #00cf35;
+      font-size: 12px;
+      font-family: monospace;
+      text-align: center;
+      word-break: break-all;
+      opacity: 0.8;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-section {
+      background: #00d639;
+      padding: 56px 24px;
+    }
+    .stats-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .stats-header {
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 800;
+      color: #000;
+      margin-bottom: 40px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .stats-grid {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .stat-block {
+      flex: 1 1 200px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 900;
+      color: #000;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #0a3d1a;
+      line-height: 1.5;
+    }
+    .stats-empty {
+      text-align: center;
+      font-size: 14px;
+      color: #0a3d1a;
+      font-style: italic;
+      opacity: 0.75;
+    }
+
+    /* ── TAB / BODY SECTION ── */
+    .tab-section {
+      background: #fff;
+      padding: 80px 24px;
+    }
+    .tab-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .section-heading {
+      font-size: clamp(22px, 2.5vw, 32px);
+      font-weight: 800;
+      color: #1d1d1b;
+      margin-bottom: 24px;
+    }
+    .tab-body-text {
+      color: #333;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .tab-body-text p { margin-bottom: 18px; }
+
+    /* ── CONTENT SPOTS ── */
+    .content-spots-section {
+      background: #f0f0ee;
+      padding: 72px 24px;
+    }
+    .content-spots-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .content-spot-block {}
+    .content-spot-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #00a82d;
+      margin-bottom: 12px;
+    }
+    .content-spot-text {
+      color: #333;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    /* ── ASSET GRID (features + icons) ── */
+    .asset-section {
+      padding: 64px 24px;
+    }
+    .asset-section--white { background: #fff; }
+    .asset-section--grey { background: #f5f5f5; }
+    .asset-section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .asset-section-heading {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 24px;
+    }
+    .asset-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .asset-card {
+      flex: 1 1 160px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .asset-section--grey .asset-card { background: #fafafa; }
+    .asset-card-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+    .asset-card-path {
+      font-size: 11px;
+      font-family: monospace;
+      color: #00a82d;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+    .asset-card-empty {
+      font-size: 12px;
+      color: #ccc;
+      font-style: italic;
+    }
+
+    /* ── SECTION SHARED ── */
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: #1d1d1b;
+      border-top: 1px solid #2a2a2a;
+      padding: 40px 24px 28px;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #00cf35; margin-bottom: 16px; }
+    .footer-bottom { margin-top: 12px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-inner { flex-direction: column; }
+      .hero-right { width: 100%; }
+      .header-nav { display: none; }
+      .content-spots-inner { grid-template-columns: 1fr; }
+      .stats-grid { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PREVIEW BANNER -->
+  <div class="preview-banner">
+    <div class="preview-banner-inner">
+      <span class="preview-badge">Preview</span>
+      <span class="preview-meta">Generated by Folio &nbsp;&middot;&nbsp; HR Tech &nbsp;&middot;&nbsp; US &nbsp;&middot;&nbsp; May 9, 2026, 1:27 PM</span>
+      <div class="preview-seo">Page Title: Sage People eBook: Employee experience strategy guide &nbsp;&middot;&nbsp; Type: eBook</div>
+    </div>
+  </div>
+
+  
+
+  <!-- HEADER -->
+  <header class="site-header site-header--no-note">
+    <div class="sage-logo">Sage</div>
+    <nav>
+      <ul class="header-nav">
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Industries</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <a class="btn-primary" href="#">Download now</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <span class="eyebrow-tag">eBook</span>
+        <h1 class="hero-h1">Turn employee experience into your competitive advantage</h1>
+        <p class="hero-subtitle">Learn why 84% of employees are disengaged and how experience-focused strategies deliver 3x better returns.</p>
+        <a class="hero-cta-btn" href="#">Download now</a>
+      </div>
+      <div class="hero-right">
+        <div class="hero-image-area">
+          <span class="hero-image-label">Hero image</span>
+          <span class="hero-image-path">/Images/SageDotCom/Master/Products/intacct/hero-banner-mosaics/Hero-banner-Financial-Services</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section class="stats-section">
+    <div class="stats-inner">
+      <h2 class="stats-header">The engagement crisis is costing you more than you think</h2>
+      <div class="stats-grid">
+      <div class="stat-block">
+        <div class="stat-value">83%</div>
+        <div class="stat-label">of HR leaders prioritize employee experience</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value">2X</div>
+        <div class="stat-label">engagement uplift with experience-led HCM</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value">96%</div>
+        <div class="stat-label">see retention gains from connected experiences</div>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- TAB / BODY -->
+  
+  <section class="tab-section">
+    <div class="tab-inner">
+      <h2 class="section-heading">What you&#39;ll learn</h2>
+      <div class="tab-body-text"><p>HR leaders face a productivity crisis. Over a third of employees admit they&#39;re productive for less than 30 hours per week, costing organizations a full day of productivity weekly. Traditional engagement programs aren&#39;t working.</p><p>This eBook reveals why shifting focus from measuring engagement to creating positive workforce experiences delivers measurable results. You&#39;ll discover how top-performing organizations achieve nearly three times the return on assets through experience-led strategies.</p><p>Learn practical approaches to transform your employee lifecycle and boost productivity, especially among younger workers who will comprise half the workforce by 2020.</p></div>
+    </div>
+  </section>
+
+  <!-- CONTENT SPOTS -->
+  
+  <section class="content-spots-section">
+    <div class="content-spots-inner">
+      
+      <div class="content-spot-block">
+        <div class="content-spot-label">Content Spot 1</div>
+        <p class="content-spot-text">See how Sage People helps you create connected employee experiences that drive real engagement and productivity gains across your entire workforce.</p>
+      </div>
+      
+      <div class="content-spot-block">
+        <div class="content-spot-label">Content Spot 2</div>
+        <div class="content-spot-text"><p>Stop losing a full day of productivity per employee each week. This eBook shows you exactly how to shift from traditional engagement tactics to experience-focused strategies that deliver measurable results. Download now to start transforming your workforce performance.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT FEATURES (Tab SVG 1–5) -->
+  <section class="asset-section asset-section--white">
+    <div class="asset-section-inner">
+      <div class="asset-section-heading">Product feature images (Tab SVG 1–5)</div>
+      <div class="asset-grid">
+        
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 1</div>
+      <div class="asset-card-path">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/intacct-copilot-product-tour-reconcile-ledger-2-US-952w608h</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 2</div>
+      <div class="asset-card-path">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/intacct-copilot-healthcare-cp-comp2-us-708w546h</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 3</div>
+      <div class="asset-card-path">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/copilot-acelerate-your-close-US-952w608h</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 4</div>
+      <div class="asset-card-path">/new-brand/Product UI/US/SVGs/sage-intacct/copilot/intacct-copilot-healthcare-comp2-us-1280w578h</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 5</div>
+      <div class="asset-card-path">/new-brand/Product UI/US/SVGs/sage-intacct/intacct-automated-financial-management-controls-high-level-overview-us-comp2-708w476h-1</div>
+    </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFIT ICONS (Benefit Icon 1–6) -->
+  <section class="asset-section asset-section--grey">
+    <div class="asset-section-inner">
+      <div class="asset-section-heading">Benefit icons (Benefit Icon 1–6)</div>
+      <div class="asset-grid">
+        
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 1</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/building-and-peoplev2</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 2</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/accessibility</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 3</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/book-open</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 4</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/employee</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 5</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/addresses</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 6</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/balance</div>
+    </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-logo">Sage</div>
+    <div class="footer-bottom">
+      &copy; 2026 Sage Group plc or its licensors. All rights reserved. &nbsp;&middot;&nbsp; Preview generated by Folio.
+    </div>
+  </footer>
+
+</body>
+</html>
