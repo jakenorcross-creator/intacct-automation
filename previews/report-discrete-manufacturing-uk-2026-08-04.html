@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>discrete manufacturing Report — Sage Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f5f5f5;
+      color: #1d1d1b;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── PREVIEW BANNER ── */
+    .preview-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: #00d639;
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 8px 16px;
+    }
+    .preview-banner-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      align-items: baseline;
+    }
+    .preview-badge { text-transform: uppercase; letter-spacing: 0.08em; }
+    .preview-meta { font-weight: 400; font-size: 12px; opacity: 0.85; }
+    .preview-seo {
+      width: 100%;
+      font-weight: 400;
+      font-size: 11px;
+      opacity: 0.75;
+      padding-top: 2px;
+    }
+
+    /* ── REVIEW NOTE BANNER ── */
+    .review-note-banner {
+      background: #fff8c5;
+      border-bottom: 2px solid #e6b800;
+      padding: 12px 24px;
+      margin-top: 52px;
+    }
+    .review-note-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .review-note-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .review-note-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #7a5c00;
+      line-height: 1.5;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      z-index: 100;
+    }
+    .site-header--with-note { top: 52px; }
+    .site-header--no-note { top: 52px; }
+    .sage-logo { font-size: 22px; font-weight: 800; color: #00cf35; letter-spacing: -0.02em; }
+    .header-nav { display: flex; gap: 24px; list-style: none; }
+    .header-nav a { color: #555; font-size: 14px; text-decoration: none; }
+    .header-right { display: flex; gap: 12px; }
+    .btn-primary {
+      background: #00cf35;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      padding: 9px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: #1d1d1b;
+      padding: 80px 24px 72px;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 56px;
+      align-items: flex-start;
+    }
+    .hero-left { flex: 1 1 55%; }
+    .hero-right { flex: 0 0 380px; }
+    .eyebrow-tag {
+      display: inline-block;
+      border: 1px solid #00cf35;
+      color: #00cf35;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 20px;
+    }
+    .hero-h1 {
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .hero-subtitle {
+      color: #b0b0a8;
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .hero-cta-btn {
+      display: inline-block;
+      background: #00cf35;
+      color: #000;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 13px 28px;
+      text-decoration: none;
+    }
+    .hero-image-area {
+      background: #2a2a28;
+      border: 1px solid #383836;
+      border-radius: 8px;
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+    }
+    .hero-image-label {
+      color: #555;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero-image-path {
+      color: #00cf35;
+      font-size: 12px;
+      font-family: monospace;
+      text-align: center;
+      word-break: break-all;
+      opacity: 0.8;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-section {
+      background: #00d639;
+      padding: 56px 24px;
+    }
+    .stats-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .stats-header {
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 800;
+      color: #000;
+      margin-bottom: 40px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .stats-grid {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .stat-block {
+      flex: 1 1 200px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 900;
+      color: #000;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #0a3d1a;
+      line-height: 1.5;
+    }
+    .stats-empty {
+      text-align: center;
+      font-size: 14px;
+      color: #0a3d1a;
+      font-style: italic;
+      opacity: 0.75;
+    }
+
+    /* ── TAB / BODY SECTION ── */
+    .tab-section {
+      background: #fff;
+      padding: 80px 24px;
+    }
+    .tab-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .section-heading {
+      font-size: clamp(22px, 2.5vw, 32px);
+      font-weight: 800;
+      color: #1d1d1b;
+      margin-bottom: 24px;
+    }
+    .tab-body-text {
+      color: #333;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .tab-body-text p { margin-bottom: 18px; }
+
+    /* ── CONTENT SPOTS ── */
+    .content-spots-section {
+      background: #f0f0ee;
+      padding: 72px 24px;
+    }
+    .content-spots-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .content-spot-block {}
+    .content-spot-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #00a82d;
+      margin-bottom: 12px;
+    }
+    .content-spot-text {
+      color: #333;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    /* ── ASSET GRID (features + icons) ── */
+    .asset-section {
+      padding: 64px 24px;
+    }
+    .asset-section--white { background: #fff; }
+    .asset-section--grey { background: #f5f5f5; }
+    .asset-section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .asset-section-heading {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 24px;
+    }
+    .asset-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .asset-card {
+      flex: 1 1 160px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .asset-section--grey .asset-card { background: #fafafa; }
+    .asset-card-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+    .asset-card-path {
+      font-size: 11px;
+      font-family: monospace;
+      color: #00a82d;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+    .asset-card-empty {
+      font-size: 12px;
+      color: #ccc;
+      font-style: italic;
+    }
+
+    /* ── SECTION SHARED ── */
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: #1d1d1b;
+      border-top: 1px solid #2a2a2a;
+      padding: 40px 24px 28px;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #00cf35; margin-bottom: 16px; }
+    .footer-bottom { margin-top: 12px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-inner { flex-direction: column; }
+      .hero-right { width: 100%; }
+      .header-nav { display: none; }
+      .content-spots-inner { grid-template-columns: 1fr; }
+      .stats-grid { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PREVIEW BANNER -->
+  <div class="preview-banner">
+    <div class="preview-banner-inner">
+      <span class="preview-badge">Preview</span>
+      <span class="preview-meta">Generated by Folio &nbsp;&middot;&nbsp; discrete manufacturing &nbsp;&middot;&nbsp; UK &nbsp;&middot;&nbsp; Aug 4, 2026, 1:47 PM</span>
+      <div class="preview-seo">Page Title: Sage X3 eBook: Visibility Across Plan-to-Cash &nbsp;&middot;&nbsp; Type: eBook</div>
+    </div>
+  </div>
+
+  
+  <!-- REVIEW NOTE -->
+  <div class="review-note-banner">
+    <div class="review-note-inner">
+      <span class="review-note-icon">&#9888;</span>
+      <p class="review-note-text">No compelling statistics found in document or knowledge base - please add manually using the stat override feature.</p>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header site-header--with-note">
+    <div class="sage-logo">Sage</div>
+    <nav>
+      <ul class="header-nav">
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Industries</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <a class="btn-primary" href="#">Download now</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <span class="eyebrow-tag">eBook</span>
+        <h1 class="hero-h1">See your full plan-to-cash cycle clearly - or keep losing margin</h1>
+        <p class="hero-subtitle">UK discrete manufacturers are making costly decisions in the dark. This eBook shows you why fragmented systems are the root cause - and what real visibility looks like.</p>
+        <a class="hero-cta-btn" href="#">Download now</a>
+      </div>
+      <div class="hero-right">
+        <div class="hero-image-area">
+          <span class="hero-image-label">Hero image</span>
+          <span class="hero-image-path">/Images/SageDotCom/new-brand/Product UI/GB/SVGs/intacct/hero-intacct-financial-services-dashboard-comp2-S-6163-gb</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section class="stats-section">
+    <div class="stats-inner">
+      <h2 class="stats-header">You may be carrying too much stock and too little - at exactly the same time</h2>
+      <p class="stats-empty">Stats not available — add via stat override</p>
+    </div>
+  </section>
+
+  <!-- TAB / BODY -->
+  
+  <section class="tab-section">
+    <div class="tab-inner">
+      <h2 class="section-heading">What&#39;s inside</h2>
+      <div class="tab-body-text"><p>If your sales, production, inventory, and finance teams each work from different data, you are not running one business - you are running four. UK discrete manufacturers face a compounding problem: siloed systems create planning errors that cascade into missed deliveries, inaccurate costs, and cash flow surprises that only become visible weeks too late.</p><p>This eBook reveals why visibility gaps are not a people or process problem - they are a data connectivity problem. You will learn how inventory inaccuracies extend beyond the warehouse to work centres, unrecorded scrap, and part-built assemblies. You will see how the disconnect between operations and finance causes manufacturers to underprice jobs or lose bids entirely, and how unreliable operational data makes cash flow forecasting little more than guesswork.</p><p>The eBook sets out how connecting planning, production, inventory, sales, and finance on a single platform - like Sage X3 - gives you one accurate version of the truth. That means confident delivery commitments, real-time margin protection, and a cash position you can actually plan around.</p></div>
+    </div>
+  </section>
+
+  <!-- CONTENT SPOTS -->
+  
+  <section class="content-spots-section">
+    <div class="content-spots-inner">
+      
+      <div class="content-spot-block">
+        <div class="content-spot-label">Content Spot 1</div>
+        <p class="content-spot-text">Sage X3 connects every stage of the plan-to-cash cycle in one platform - so your teams always work from the same data, and you always know where margin, stock, and cash actually stand.</p>
+      </div>
+      
+      <div class="content-spot-block">
+        <div class="content-spot-label">Content Spot 2</div>
+        <div class="content-spot-text"><p>Fragmented systems do not just slow you down - they cost you customers, margin, and working capital you cannot afford to lose. This eBook gives UK discrete manufacturing leaders a clear view of where visibility breaks down and what it takes to fix it. If you are responsible for production, inventory, order fulfilment, or financial performance, the insights here are directly relevant to decisions you are making right now. Download it today and see the full picture.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT FEATURES (Tab SVG 1–5) -->
+  <section class="asset-section asset-section--white">
+    <div class="asset-section-inner">
+      <div class="asset-section-heading">Product feature images (Tab SVG 1–5)</div>
+      <div class="asset-grid">
+        
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 1</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Images/Optimisation/NA Hub/intacct-core-financial-accounts-payable-gb-comp2-708w551h</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 2</div>
+      <div class="asset-card-path">/Images/SageDotCom/Images/Optimisation/NA Hub/intacct-financial-reporting-dashboards-gb-comp2-708w587h</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 3</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/new-brand/Product UI/GB/SVGs/intacct/tab-6-Intacct-multi-currency-global-comp2-gb</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 4</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/new-brand/Product UI/GB/SVGs/intacct/Intacct-time-expenses-comp2-S-208</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Tab SVG 5</div>
+      <div class="asset-card-empty">—</div>
+    </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFIT ICONS (Benefit Icon 1–6) -->
+  <section class="asset-section asset-section--grey">
+    <div class="asset-section-inner">
+      <div class="asset-section-heading">Benefit icons (Benefit Icon 1–6)</div>
+      <div class="asset-grid">
+        
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 1</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/authentication</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 2</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/favourite</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 3</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/cash-note-dollar</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 4</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/bank v2</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 5</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/bookkeeping-dollar_90x90</div>
+    </div>
+    <div class="asset-card">
+      <div class="asset-card-label">Benefit Icon 6</div>
+      <div class="asset-card-path">/Images/SageDotCom/Master/Icons/Spot Icons Over Light/accessibility</div>
+    </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-logo">Sage</div>
+    <div class="footer-bottom">
+      &copy; 2026 Sage Group plc or its licensors. All rights reserved. &nbsp;&middot;&nbsp; Preview generated by Folio.
+    </div>
+  </footer>
+
+</body>
+</html>
